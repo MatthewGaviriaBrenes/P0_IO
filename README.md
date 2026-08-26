@@ -1,4 +1,4 @@
-# Dynamic Knapsack vs Greed Knapsack
+# Dynamic Knapsack vs Greedy Knapsack
 
 Console-based program that solves the Knapsack problem using three algoritms:
 
