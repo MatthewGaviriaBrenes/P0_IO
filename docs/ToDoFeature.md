@@ -11,18 +11,18 @@ This will be used for guidance on what needs to be implemented.
 
 ## 2 - Knapsack Items
 
-* [ ] Data object for Knapsack item.
-  * [ ] Identifier (optional)
-  * [ ] Value.
-  * [ ] Weight.
-  * [ ] Ratio (Optional): Value/Weight.
-  * [ ] Available (may be boolean or a number value - needs further review)
-* [ ] Data structure for available Knapsack items.
-* [ ] Functions:
-  * [ ] Generate new Knapsack item with randomized value and weight (0 to max value set by params).
-    * [ ] Calculate ratio (if applicable).
-  * [ ] Find most valuable item in list of items, must be less or equal than weight limit.
-  * [ ] Find item with best value ratio (value/weight), must be less or equal than weight limit.
+* [X] Data object for Knapsack item.
+  * [X] Identifier (optional)
+  * [X] Value.
+  * [X] Weight.
+  * [X] Ratio (Optional): Value/Weight.
+  * [X] Available (may be boolean or a number value - needs further review)
+* [X] Data structure for available Knapsack items.
+* [X] Functions:
+  * [X] Generate new Knapsack item with randomized value and weight (1 to max value set by params).
+    * [X] Calculate ratio (if applicable).
+  * [X] Find most valuable item in list of items, must be less or equal than weight limit.
+  * [X] Find item with best value ratio (value/weight), must be less or equal than weight limit.
 
 ## 3 - Knapsack Bag
 
