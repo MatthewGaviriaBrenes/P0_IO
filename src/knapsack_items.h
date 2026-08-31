@@ -49,9 +49,11 @@ Item* get_most_valuable_item(const Item *itemsList, size_t listSize, int weightL
 size_t get_most_valuable_item_index(const Item *itemsList, size_t listSize, 
     int weightLimit, bool proportional);
 
-
 // Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
 ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight);
 
+// Reset the available status of all items in the items list to true, making them available for selection again.
+// Only use this function if using the same items list for multiple knapsack problem runs.
+void reset_item_availability(ItemList *list);
 
 #endif

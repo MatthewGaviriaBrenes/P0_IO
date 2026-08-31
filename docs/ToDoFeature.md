@@ -21,43 +21,43 @@ This will be used for guidance on what needs to be implemented.
 * [X] Functions:
   * [X] Generate new Knapsack item with randomized value and weight (1 to max value set by params).
     * [X] Calculate ratio (if applicable).
-  * [X] Find most valuable item in list of items, must be less or equal than weight limit.
+  * [X] Find most valuable item in item list by raw value.
   * [X] Find item with best value ratio (value/weight), must be less or equal than weight limit.
 
 ## 3 - Knapsack Bag
 
-* [ ] Data structure for Knapsack bag.
-  * [ ] Max weight.
-  * [ ] Available weight.
-  * [ ] Added items.
-  * [ ] Item count.
-* [ ] Functions:
-  * [ ] Add item to knapsack, update available weight.
-  * [ ] Generate list of items in knapsack.
+* [X] Data structure for Knapsack bag.
+  * [X] Max weight.
+  * [X] Available weight.
+  * [X] Added items.
+  * [X] Item count.
+* [X] Functions:
+  * [X] Generate Knapsack bag with given maximum weight.
+  * [X] Add item to knapsack, update available weight.
+  * [ ] TBD - Consider additional functions usabe for Knapsack bag management. 
 
 ## 4 - Greedy algorithm
 
-* [ ] Input parameters:
-  * [ ] Available items to fill Knapsack.
-  * [ ] Knapsack Bag's weight
-* [ ] Generate Knapsack bag with given maximum weight.
-* [ ] Select item to add to Knapsack bag.
-  * [ ] Item with highest value in list.
-  * [ ] Item must be available.
-  * [ ] Less or equal to available weight in bag.
-* [ ] Update available weight in bag and repeat search until no new items can be added.
+* [X] Input parameters:
+  * [X] Available items to fill Knapsack.
+  * [X] Knapsack to fill.
+* [X] Select item to add to Knapsack bag.
+  * [X] Item with highest value in list.
+  * [X] Item must be available.
+  * [X] Less or equal to available weight in bag.
+* [X] Update available weight in bag and repeat search until no new items can be added.
 
 ## 5 - Proportional Greed algorithm
 
-* [ ] Input parameters:
-  * [ ] Available items to fill Knapsack.
-  * [ ] Knapsack Bag's weight
-* [ ] Generate Knapsack bag with given maximum weight.
-* [ ] Select item to add to Knapsack bag.
-  * [ ] Item with highest ratio in list.
-  * [ ] Item must be available.
-  * [ ] Less or equal to available weight in bag.
-* [ ] Update available weight in bag and repeat search until no new items can be added.
+* [X] Input parameters:
+  * [X] Available items to fill Knapsack.
+  * [X] Knapsack Bag's weight
+* [X] Generate Knapsack bag with given maximum weight.
+* [X] Select item to add to Knapsack bag.
+  * [X] Item with highest ratio in list.
+  * [X] Item must be available.
+  * [X] Less or equal to available weight in bag.
+* [X] Update available weight in bag and repeat search until no new items can be added.
 
 ## 6 - Knapsack Distribution Matrix (Important for 1/0 Knapsack DP)
 

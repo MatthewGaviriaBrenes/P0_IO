@@ -164,3 +164,15 @@ ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight) 
     return list;
 }
 
+// Reset the available status of all items in the items list to true, making them available for selection again.
+// Only use this function if using the same items list for multiple knapsack problem runs.
+void reset_item_availability(ItemList *list) {
+    if (list == NULL) {
+        fprintf(stderr, "Items list is NULL.\n");
+        return;
+    }
+    for (size_t index = 0; index < list->size; index++) {
+        list->items[index].available = true;
+    }
+}
+

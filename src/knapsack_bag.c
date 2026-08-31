@@ -44,25 +44,31 @@ void knapsack_free(const Knapsack *bag) {
 
 // Add an item to the knapsack, updating available weight and item count.
 // Counter for current items in knapsack also serves as index for new item.
-void add_item_to_knapsack(Knapsack *bag, Item *item) {
+// Returns pointer to item if it could be added.
+// Return NULL if item could not be added (e.g., due to weight constraints).
+Item *add_item_to_knapsack(Knapsack *bag, Item *item) {
     if (bag == NULL || item == NULL) {
         fprintf(stderr, "Error: Knapsack bag or item is NULL.\n");
-        return;
+        return NULL;
     }
     if (bag->itemCount >= bag->itemCapacity) {
         fprintf(stderr, "Error: Knapsack bag is full. Consider expanding capacity.\n");
-        return;
+        return NULL;
     }
     if (item->weight > bag->availableWeight) {
         fprintf(stderr, "Error: Item weight exceeds available weight in knapsack.\n");
-        return;
+        return NULL;
     }
 
     bag->items[bag->itemCount] = item;
     bag->availableWeight -= item->weight;
     bag->itemCount++;
+    return item;
 }
 
+// Get an item from the knapsack by index.
+// Returns NULL pointer if index is out of bounds (e.g. no item at that index) 
+// or if the knapsack doesn't exist (NULL pointer).
 Item *get_item_from_knapsack(const Knapsack *bag, int index) {
     if (bag == NULL) {
         fprintf(stderr, "Error: Knapsack bag is NULL.\n");
@@ -99,4 +105,20 @@ void expand_knapsack_item_capacity(Knapsack *bag, int newCapacity) {
 
     bag->items = newItemsArray;
     bag->itemCapacity = newCapacity;
+}
+
+// Check if an item is already in the knapsack to avoid adding duplicates.
+//TODO: Review if need to remove (for non-binary knapsack problem, duplicates may be allowed).
+bool is_item_already_in_knapsack(const Knapsack *bag, const Item *item) {
+    if (bag == NULL || item == NULL) {
+        fprintf(stderr, "Error: Knapsack bag or item is NULL.\n");
+        return false;
+    }
+
+    for (int i = 0; i < bag->itemCount; i++) {
+        if (bag->items[i] == item) {
+            return true; // Item is already in the knapsack.
+        }
+    }
+    return false; // Item is not in the knapsack.
 }
