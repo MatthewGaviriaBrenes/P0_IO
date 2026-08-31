@@ -1,10 +1,10 @@
 #include "knapsack_items.h"
 
 // Create a new knapsack item with specified value and weight.
-KnapsackItem *create_knapsack_item(int value, int weight) {
-    KnapsackItem *item = (KnapsackItem *)malloc(sizeof(KnapsackItem));
+Item *create_knapsack_item(int value, int weight) {
+    Item *item = (Item *)malloc(sizeof(Item));
     if (item == NULL) {
-        fprintf(stderr, "Memory allocation failed for KnapsackItem.\n");
+        fprintf(stderr, "Memory allocation failed for Item.\n");
         exit(EXIT_FAILURE);
     }
     item->value = value;
@@ -15,18 +15,18 @@ KnapsackItem *create_knapsack_item(int value, int weight) {
 }
 
 // Create an array to store a specific amount of items to fill the knapsack.
-KnapsackItemList *new_knapsack_items_list(int listSize) {
+ItemList *new_knapsack_items_list(int listSize) {
     if (listSize <= 0) {
         fprintf(stderr, "Number of items must be greater than zero.\n");
         exit(EXIT_FAILURE);
     }
-    KnapsackItemList *list = (KnapsackItemList *)malloc(sizeof(KnapsackItemList));
+    ItemList *list = (ItemList *)malloc(sizeof(ItemList));
     if (list == NULL) {
-        fprintf(stderr, "Memory allocation failed for KnapsackItemList.\n");
+        fprintf(stderr, "Memory allocation failed for ItemList.\n");
         exit(EXIT_FAILURE);
     }
     list->size = listSize;
-    list->items = (KnapsackItem *)malloc(listSize * sizeof(KnapsackItem));
+    list->items = (Item *)malloc(listSize * sizeof(Item));
     if (list->items == NULL) {
         fprintf(stderr, "Memory allocation failed for items array.\n");
         free(list);
@@ -44,7 +44,7 @@ KnapsackItemList *new_knapsack_items_list(int listSize) {
 
 // Set value of knapsack item inside a list at a specific index. 
 // If the index is out of bounds, print an error message.
-void set_knapsack_item(KnapsackItemList *list, int index, int value, int weight, bool available) {
+void set_knapsack_item(ItemList *list, int index, int value, int weight, bool available) {
     if (list == NULL) {
         fprintf(stderr, "Items list is NULL.\n");
         return;
@@ -61,7 +61,7 @@ void set_knapsack_item(KnapsackItemList *list, int index, int value, int weight,
 
 // Get pointer to knapsack item in a list at a specific index.
 // If the index is out of bounds or the list is NULL, print an error message and return NULL.
-KnapsackItem* get_knapsack_item(KnapsackItemList *list, int index) {
+Item* get_knapsack_item(ItemList *list, int index) {
     if (list == NULL) {
         fprintf(stderr, "Items list is NULL.\n");
         return NULL;
@@ -75,7 +75,7 @@ KnapsackItem* get_knapsack_item(KnapsackItemList *list, int index) {
 // Get the index of the most valuable item in the list up to a specified weight limit.
 // Return -1 if no item is available; -2 if there is an error.
 // If proportional is true, consider the value-to-weight ratio instead of just value.
-int get_most_valuable_item_index(KnapsackItem *itemsList, int listSize, 
+int get_most_valuable_item_index(Item *itemsList, int listSize, 
     int weightLimit, bool proportional) {
     if (itemsList == NULL) {
         fprintf(stderr, "Items list is NULL.\n");
@@ -106,12 +106,12 @@ int get_most_valuable_item_index(KnapsackItem *itemsList, int listSize,
 }
 
 // Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
-KnapsackItemList *create_random_knapsack_items_list(int listSize, int maxValue, int maxWeight) {
+ItemList *create_random_knapsack_items_list(int listSize, int maxValue, int maxWeight) {
     if (listSize <= 0 || maxValue <= 0 || maxWeight <= 0) {
         fprintf(stderr, "List size, max value, and max weight must be greater than zero.\n");
         exit(EXIT_FAILURE);
     }
-    KnapsackItemList *list = new_knapsack_items_list(listSize);
+    ItemList *list = new_knapsack_items_list(listSize);
     for (int index = 0; index < listSize; index++) {
         int value = rand() % (maxValue + 1) + 1; // Random value between 1 and maxValue.
         int weight = rand() % (maxWeight + 1) + 1; // Random weight between 1 and maxWeight.
@@ -122,7 +122,7 @@ KnapsackItemList *create_random_knapsack_items_list(int listSize, int maxValue, 
 
 // Free the memory allocated for the knapsack item list and its items.
 // Use for memory cleanup after the knapsack problem is solved.
-void free_knapsack_item_list(KnapsackItemList *list) {
+void free_knapsack_item_list(ItemList *list) {
     if (list == NULL) {
         return;
     }
