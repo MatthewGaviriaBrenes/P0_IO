@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define LIST_ERROR ((size_t)-1) // Error code for invalid list operations.
+
 typedef struct  {
     int value;
     int weight;
@@ -13,7 +15,7 @@ typedef struct  {
 
 
 typedef struct {
-    int size;   // Store list size for easy access.
+    size_t size;   // Store list size for easy access.
     Item *items;
 } ItemList;
 
@@ -21,30 +23,35 @@ typedef struct {
 // Function prototypes for knapsack item management. //
 
 // Create a new knapsack item with specified value and weight.
-Item *create_item(int value, int weight);
+Item *item_create(int value, int weight);
 
 // Create an array to store a specific amount of items to fill the knapsack.
-ItemList *new_items_list(int listSize);
-
-// Set value of knapsack item inside a list at a specific index. 
-// If the index is out of bounds, print an error message.
-void set_knapsack_item(ItemList *list, int index, int value, int weight, bool available);
-
-// Get pointer to knapsack item in a list at a specific index.
-// If the index is out of bounds or the list is NULL, print an error message and return NULL.
-Item* get_knapsack_item(ItemList *list, int index);
-
-// Get the index of the most valuable item in the list up to a specified weight limit.
-// Return -1 if no item is available; -2 if there is an error.
-// If proportional is true, consider the value-to-weight ratio instead of just value.
-int get_most_valuable_item_index(Item *itemsList, int listSize, 
-    int weightLimit, bool proportional);
-
-// Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
-ItemList *create_random_knapsack_items_list(int listSize, int maxValue, int maxWeight);
+ItemList *item_list_create(size_t listSize);
 
 // Free the memory allocated for the knapsack item list and its items.
 // Use for memory cleanup after the knapsack problem is solved.
-void free_knapsack_item_list(ItemList *list);
+void item_list_free(const ItemList *list);
+
+// Set value of knapsack item inside a list at a specific index. 
+// If the index is out of bounds, print an error message.
+void set_knapsack_item(const ItemList *list, size_t index, int value, int weight, bool available);
+
+// Get pointer to knapsack item in a list at a specific index.
+// If the index is out of bounds or the list is NULL, print an error message and return NULL.
+Item* get_knapsack_item(const ItemList *list, size_t index);
+
+// Get a pointer to the most valuable item in the list up to a specified weight limit.
+// If proportional is true, consider the value-to-weight ratio instead of just value.
+Item* get_most_valuable_item(const Item *itemsList, size_t listSize, int weightLimit, bool proportional);
+
+// Get the index of the most valuable item in the list up to a specified weight limit.
+// If proportional parameter is true, consider the value-to-weight ratio instead of just value.
+size_t get_most_valuable_item_index(const Item *itemsList, size_t listSize, 
+    int weightLimit, bool proportional);
+
+
+// Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
+ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight);
+
 
 #endif
