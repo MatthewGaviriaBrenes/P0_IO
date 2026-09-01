@@ -34,7 +34,8 @@ This will be used for guidance on what needs to be implemented.
 * [X] Functions:
   * [X] Generate Knapsack bag with given maximum weight.
   * [X] Add item to knapsack, update available weight.
-  * [ ] TBD - Consider additional functions usabe for Knapsack bag management. 
+  * [ ] TBD - Consider additional functions for Knapsack bag management.
+  * [ ] TBD - Consider copy function to duplicate knapsack.
 
 ## 4 - Greedy algorithm
 
