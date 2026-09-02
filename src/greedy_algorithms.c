@@ -22,7 +22,7 @@ void greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proportional) 
     size_t addedItemCount = 0; // Counter for items added to the knapsack.
     while (bag->availableWeight > 0) {
         // Select best available item from the list based on the greedy criteria (value or value-to-weight ratio).
-        Item *bestItem = get_most_valuable_item(itemList->items, itemList->size, bag->availableWeight, proportional);
+        Item *bestItem = get_most_valuable_item(itemList, bag->availableWeight, proportional);
         if (bestItem == NULL) {
             // No more items can be added due to weight constraints.
             break;
