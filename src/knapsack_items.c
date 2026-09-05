@@ -57,6 +57,7 @@ ItemList *item_list_create(size_t listSize) {
         list->items[index].weight = 0;
         list->items[index].available = true;
     }
+    return list;
 }
 
 // Free the memory allocated for the knapsack item list and its items.
@@ -71,7 +72,7 @@ void item_list_free(const ItemList *list) {
 
 // Set value of knapsack item inside a list at a specific index. 
 // If the index is out of bounds, print an error message.
-void set_item_in_list(const ItemList *list, size_t index, int value, int weight, bool available) {
+void set_item_in_list(ItemList *list, size_t index, int value, int weight, bool available) {
     if (list == NULL) {
         fprintf(stderr, "Items list is NULL.\n");
         return;
@@ -184,16 +185,28 @@ size_t get_most_valuable_item_index(const ItemList *itemsList, int weightLimit, 
 
 // Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
 ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight) {
+
+    // Set random seed based on current time to ensure different random values on each run.
+    srand((unsigned int) time(NULL));
+
     if (listSize <= 0 || maxValue <= 0 || maxWeight <= 0) {
         fprintf(stderr, "List size, max value, and max weight must be greater than zero.\n");
         exit(EXIT_FAILURE);
     }
+
     ItemList *list = item_list_create(listSize);
+    if (list == NULL) {
+        fprintf(stderr, "Failed to create item list.\n");
+        exit(EXIT_FAILURE);
+        return NULL;
+    }
+
     for (size_t index = 0; index < listSize; index++) {
         int value = rand() % maxValue + 1; // Random value between 1 and maxValue.
         int weight = rand() % maxWeight + 1; // Random weight between 1 and maxWeight.
         set_item_in_list(list, index, value, weight, true);
     }
+
     return list;
 }
 
@@ -209,3 +222,14 @@ void reset_item_list_availability(ItemList *list) {
     }
 }
 
+// Print list of items to the screen for debugging purposes.
+void print_items_list(const ItemList *list) {
+    if (list == NULL) {
+        fprintf(stderr, "Items list is NULL.\n");
+        return;
+    }
+    for (size_t index = 0; index < list->size; index++) {
+        const Item *item = &(list->items[index]);
+        printf("Item %zu - ID: %d, Value: %d, Weight: %d, Available: %s\n", index + 1, item->id, item->value, item->weight, item->available ? "Yes" : "No");
+    }
+}
