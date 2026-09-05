@@ -1,15 +1,16 @@
-#ifndef KNAPSACK_ITEM_H
-#define KNAPSACK_ITEM_H
-
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
+#ifndef KNAPSACK_ITEM_H
+#define KNAPSACK_ITEM_H
 
 #define LIST_ERROR ((size_t)-1) // Error code for invalid list operations.
 
 typedef struct  {
+    int id;
     int value;
     int weight;
-    int ratio; // Value/Ratio - Review if necessary.
     bool available;
 } Item;
 
@@ -25,6 +26,9 @@ typedef struct {
 // Create a new knapsack item with specified value and weight.
 Item *item_create(int value, int weight);
 
+// Calculate the ratio of value to weight for a knapsack item. Returns -1 if there were errors.
+int get_item_ratio(const Item *item);
+
 // Create an array to store a specific amount of items to fill the knapsack.
 ItemList *item_list_create(size_t listSize);
 
@@ -34,26 +38,30 @@ void item_list_free(const ItemList *list);
 
 // Set value of knapsack item inside a list at a specific index. 
 // If the index is out of bounds, print an error message.
-void set_knapsack_item(const ItemList *list, size_t index, int value, int weight, bool available);
+void set_item_in_list(ItemList *list, size_t index, int value, int weight, bool available);
 
 // Get pointer to knapsack item in a list at a specific index.
 // If the index is out of bounds or the list is NULL, print an error message and return NULL.
-Item* get_knapsack_item(const ItemList *list, size_t index);
+Item* get_item_from_list(const ItemList *list, size_t index);
 
 // Get a pointer to the most valuable item in the list up to a specified weight limit.
+// Returns NULL if no item is found that meets the criteria.
 // If proportional is true, consider the value-to-weight ratio instead of just value.
-Item* get_most_valuable_item(const Item *itemsList, size_t listSize, int weightLimit, bool proportional);
+Item* get_most_valuable_item(const ItemList *itemsList, int weightLimit, bool proportional);
 
 // Get the index of the most valuable item in the list up to a specified weight limit.
-// If proportional parameter is true, consider the value-to-weight ratio instead of just value.
-size_t get_most_valuable_item_index(const Item *itemsList, size_t listSize, 
-    int weightLimit, bool proportional);
+// Return constant LIST_ERROR if no item is found that meets the criteria or if there are errors.
+// If proportional is true, consider the value-to-weight ratio instead of just value.
+size_t get_most_valuable_item_index(const ItemList *itemsList, int weightLimit, bool proportional);
 
 // Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
 ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight);
 
 // Reset the available status of all items in the items list to true, making them available for selection again.
 // Only use this function if using the same items list for multiple knapsack problem runs.
-void reset_item_availability(ItemList *list);
+void reset_item_list_availability(ItemList *list);
+
+// Print list of items to the screen for debugging purposes.
+void print_items_list(const ItemList *list);
 
 #endif
