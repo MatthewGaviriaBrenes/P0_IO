@@ -19,13 +19,13 @@ int main(int argc, char *argv[])
         printf("Usage: %s -X | -E=n\n", argv[0]);
         printf("-X : Demo Mode - Run a single random Knapsack case with all algorithms.\n");
         printf("-E=n : Experimental mode (100 * n cases).\n");
-        return 1;
+        return 0;
     }
     // Parse input parameter to start Demo mode (-X) or experimental mode (-E=n | n: number).
     if (strcmp(argv[1], "-X") == 0) 
     {
         run_demo_mode();
-        return 1;
+        return 0;
     } else if (strncmp(argv[1], "-E=", 3) == 0)
     {
         const char *e_value_input = argv[1] + 3;
@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
 
         printf("Running in Experimental mode - Input value: %d - Cases: %d\n", e_value, (e_value * 100));
         // TODO: Run program in experimental mode.
-        return 1;
+        return 0;
     } else {
         // Report error due to unknown parameter.
         fprintf(stderr, "Unknown parameter: %s\n", argv[1]);
-        return 1;
+        return 0;
     }
 }
