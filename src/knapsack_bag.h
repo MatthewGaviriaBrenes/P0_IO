@@ -9,10 +9,11 @@
 
 typedef struct {
     int maxWeight;
-    int availableWeight;    
+    int availableWeight;
+    int totalValue;         // Total value of items in the knapsack.    
     int itemCount;          // Counts items in Knapsack, also serves as index for next item to be added.
     int itemCapacity;       // Capacity of the items array, used for memory management.
-    Item **items;       // Array of pointers to items in the knapsack. Using pointers to reuse items list for other Knapsack problem runs.
+    Item **items;       // Items chosen to fill the knapsack. Uses array of pointers to items to reuse items from the available items list.
 } Knapsack;
 
 // Create a new knapsack with specified maximum weight and item capacity.
@@ -20,8 +21,10 @@ typedef struct {
 // Hint: Use size of available items to set knapsack's item capacity. 
 Knapsack *knapsack_create(int maxWeight, int itemCapacity);
 
-// Free the memory allocated for the knapsack bag and its items.
-void knapsack_free(const Knapsack *bag);
+// Free the memory allocated for the knapsack bag.
+// Items used by the knapsack are not freed here, as they can be reused for other knapsack problem runs.
+// They should be freed separately if not needed anymore.
+void knapsack_free(Knapsack *bag);
 
 // Add an item to the knapsack, updating available weight and item count.
 // Counter for current items in knapsack also serves as index for new item.
