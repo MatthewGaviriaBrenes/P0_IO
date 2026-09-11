@@ -11,7 +11,7 @@ Knapsack *knapsack_create(int maxWeight, int itemCapacity) {
     }
 
     bag->maxWeight = maxWeight;
-    bag->availableWeight = maxWeight;
+    bag->freeWeight = maxWeight;
     bag->itemCount = 0;
     bag->itemCapacity = itemCapacity;
     bag->items = malloc(itemCapacity * sizeof(Item *));
@@ -61,13 +61,14 @@ Item *add_item_to_knapsack(Knapsack *bag, Item *item) {
         fprintf(stderr, "Error: Knapsack bag is full. Consider expanding capacity.\n");
         return NULL;
     }
-    if (item->weight > bag->availableWeight) {
+    if (item->weight > bag->freeWeight) {
         fprintf(stderr, "Error: Item weight exceeds available weight in knapsack.\n");
         return NULL;
     }
 
     bag->items[bag->itemCount] = item;
-    bag->availableWeight -= item->weight;
+    bag->totalValue += item->value;
+    bag->freeWeight -= item->weight;
     bag->itemCount++;
     return item;
 }

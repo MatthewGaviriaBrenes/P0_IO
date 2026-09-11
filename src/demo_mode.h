@@ -23,5 +23,4 @@ extern const int DEMO_MAX_ITEM_WEIGHT;
 void run_demo_mode();
 
 
-
 #endif // DEMO_MODE_H

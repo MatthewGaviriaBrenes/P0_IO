@@ -9,7 +9,7 @@
 
 typedef struct {
     int maxWeight;
-    int availableWeight;
+    int freeWeight;
     int totalValue;         // Total value of items in the knapsack.    
     int itemCount;          // Counts items in Knapsack, also serves as index for next item to be added.
     int itemCapacity;       // Capacity of the items array, used for memory management.

@@ -18,7 +18,7 @@ KnapsackRunResult greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool p
         fprintf(stderr, "Error: Items list is empty.\n");
         return result;;
     }
-    if (bag->availableWeight <= 0) {
+    if (bag->freeWeight <= 0) {
         fprintf(stderr, "Error: Knapsack bag has no available weight.\n");
         return result;;
     }
@@ -27,9 +27,9 @@ KnapsackRunResult greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool p
     clock_t startTimer = clock();
 
     size_t addedItemCount = 0; // Counter for items added to the knapsack.
-    while (bag->availableWeight > 0) {
+    while (bag->freeWeight > 0) {
         // Select best available item from the list based on the greedy criteria (value or value-to-weight ratio).
-        Item *bestItem = get_most_valuable_item(itemList, bag->availableWeight, proportional);
+        Item *bestItem = get_most_valuable_item(itemList, bag->freeWeight, proportional);
         if (bestItem == NULL) {
             // No more items can be added due to weight constraints.
             break;

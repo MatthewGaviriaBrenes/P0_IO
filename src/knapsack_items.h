@@ -27,7 +27,7 @@ typedef struct {
 Item *item_create(int value, int weight);
 
 // Calculate the ratio of value to weight for a knapsack item. Returns -1 if there were errors.
-int get_item_ratio(const Item *item);
+double get_item_ratio(const Item *item);
 
 // Create an array to store a specific amount of items to fill the knapsack.
 ItemList *item_list_create(size_t listSize);

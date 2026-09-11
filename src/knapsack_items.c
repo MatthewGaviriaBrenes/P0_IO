@@ -19,7 +19,7 @@ Item *item_create(int value, int weight) {
 }
 
 // Calculate the ratio of value to weight for a knapsack item. Returns -1 if there were errors.
-int get_item_ratio(const Item *item) {
+double get_item_ratio(const Item *item) {
     if (item == NULL) {
         fprintf(stderr, "Error: Item is NULL.\n");
         return -1;
@@ -28,7 +28,7 @@ int get_item_ratio(const Item *item) {
         fprintf(stderr, "Error: Item weight is zero, cannot calculate ratio.\n");
         return -1; // Error code for division by zero.
     }
-    return item->value / item->weight;
+    return (double) item->value / item->weight;
 }
 
 // Create an array to store a specific amount of items to fill the knapsack.
