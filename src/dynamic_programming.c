@@ -4,7 +4,7 @@
 
 #include "dynamic_programming.h"
 
-// Small local helper, no need to pull in a whole utils module for this.
+// Small local helper
 static int max_int(int a, int b) {
     return (a > b) ? a : b;
 }
