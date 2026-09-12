@@ -36,6 +36,7 @@ This will be used for guidance on what needs to be implemented.
   * [X] Add item to knapsack, update available weight.
   * [ ] TBD - Consider additional functions for Knapsack bag management.
   * [ ] TBD - Consider copy function to duplicate knapsack.
+* [ ] Capture execution time for algorithm run.
 
 ## 4 - Greedy algorithm
 
@@ -47,6 +48,7 @@ This will be used for guidance on what needs to be implemented.
   * [X] Item must be available.
   * [X] Less or equal to available weight in bag.
 * [X] Update available weight in bag and repeat search until no new items can be added.
+* [X] Capture execution time for algorithm run.
 
 ## 5 - Proportional Greed algorithm
 
@@ -59,6 +61,7 @@ This will be used for guidance on what needs to be implemented.
   * [X] Item must be available.
   * [X] Less or equal to available weight in bag.
 * [X] Update available weight in bag and repeat search until no new items can be added.
+* [X] Capture execution time for algorithm run.
 
 ## 6 - Knapsack Distribution Matrix (Important for 1/0 Knapsack DP)
 
@@ -82,9 +85,8 @@ Resolves a random Knapsack problem with the following constraints:
 * Weight for each item: 1..7
 
 * [ ] Run 1/0 DP algorithm.
-* [ ] Run Greedy algorithm.
-* [ ] Run Proportional Greedy algorithm.
-* [ ] Capture execution time of each algorithm run.
+* [X] Run Greedy algorithm.
+* [X] Run Proportional Greedy algorithm.
 
 ## 9 - Experimental Mode
 
@@ -103,7 +105,6 @@ For each Knapsack problem:
 * [ ] Run 1/0 DP algorithm
 * [ ] Run Greedy algorithm
 * [ ] Run Proportional Greedy algorithm
-* [ ] Capture execution time of each algorithm run.
 
 ## 10 - Capturing execution metadata
 

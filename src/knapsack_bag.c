@@ -11,7 +11,7 @@ Knapsack *knapsack_create(int maxWeight, int itemCapacity) {
     }
 
     bag->maxWeight = maxWeight;
-    bag->availableWeight = maxWeight;
+    bag->freeWeight = maxWeight;
     bag->itemCount = 0;
     bag->itemCapacity = itemCapacity;
     bag->items = malloc(itemCapacity * sizeof(Item *));
@@ -24,22 +24,28 @@ Knapsack *knapsack_create(int maxWeight, int itemCapacity) {
     return bag;
 }
 
-// Free the memory allocated for the knapsack bag and its items.
-void knapsack_free(const Knapsack *bag) {
+// Free the memory allocated for the knapsack bag.
+// Items used by the knapsack are not freed here, as they can be reused for other knapsack problem runs.
+// They should be freed separately if not needed anymore.
+void knapsack_free(Knapsack *bag) {
     if (bag == NULL) {
         return;
     }
 
-    // Free each item in the knapsack.
+    // For each item in the knapsack, mark it as available again and remove the pointer from the knapsack.
+    // Items themselves are not freed, as they can be reused for other knapsack problem runs.
     for (int i = 0; i < bag->itemCount; i++) {
-        free(bag->items[i]);
+        bag->items[i]->available = true;
+        bag->items[i] = NULL; 
     }
 
-    // Free the items array.
+    bag->totalValue = 0;
+
+    // Free the pointer to the knapsack's items array.
     free(bag->items);
 
     // Finally, free the knapsack structure itself.
-    free((void *) bag);
+    free(bag);
 }
 
 // Add an item to the knapsack, updating available weight and item count.
@@ -55,13 +61,14 @@ Item *add_item_to_knapsack(Knapsack *bag, Item *item) {
         fprintf(stderr, "Error: Knapsack bag is full. Consider expanding capacity.\n");
         return NULL;
     }
-    if (item->weight > bag->availableWeight) {
+    if (item->weight > bag->freeWeight) {
         fprintf(stderr, "Error: Item weight exceeds available weight in knapsack.\n");
         return NULL;
     }
 
     bag->items[bag->itemCount] = item;
-    bag->availableWeight -= item->weight;
+    bag->totalValue += item->value;
+    bag->freeWeight -= item->weight;
     bag->itemCount++;
     return item;
 }
