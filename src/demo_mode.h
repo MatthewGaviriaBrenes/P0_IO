@@ -6,6 +6,7 @@
 #include "knapsack_bag.h"
 #include "knapsack_run.h"
 #include "greedy_algorithms.h"
+#include "dynamic_programming.h"
 
 #ifndef DEMO_MODE_H
 #define DEMO_MODE_H

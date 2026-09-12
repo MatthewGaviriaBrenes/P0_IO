@@ -29,9 +29,20 @@ void run_demo_mode() {
     if (dpKnapsackRun == NULL) {
         fprintf(stderr, "Error: Failed to create knapsack for 1/0 DP run.\n");
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     } 
-    //TODO: Implement 1/0 Knapsack DP algorithm and measure execution time.
+    printf("\n--- Running Knapsack Dynamic Programming algorithm for Demo mode.\n");
+    DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsackRun, demoItemList);
+    
+    print_dp_table(&dpResult, demoItemList);
+    print_knapsack_run(&dpResult.result);
+    
+    dp_result_free_table(&dpResult);
+    knapsack_free(dpKnapsackRun);
+  
+    // Reset item availability for the next algorithm run.
+    reset_item_list_availability(demoItemList); 
 
     // -- Simple Greedy run for demo mode -- //
     printf("\n--- Running Simple Greedy algorithm for Demo mode.\n");
@@ -41,6 +52,7 @@ void run_demo_mode() {
     if (simpleGreedyKnapsack == NULL) {
         fprintf(stderr, "Error: Failed to create knapsack for Simple Greedy run.\n");
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     } 
     
@@ -56,15 +68,12 @@ void run_demo_mode() {
     } 
     
     print_knapsack_run(simpleGreedyRun);
-
     
     // Free the memory allocated for the Simple Greedy run result once it is no longer needed.
     knapsack_run_free(simpleGreedyRun);
     
     // Reset item availability for the next algorithm run.
     reset_item_list_availability(demoItemList); 
-
-    
 
     // -- Proportional Greedy run for demo mode. -- //
     printf("\n--- Running Proportional Greedy algorithm for Demo mode.\n");
@@ -75,6 +84,7 @@ void run_demo_mode() {
         fprintf(stderr, "Error: Failed to create knapsack for Proportional Greedy run.\n");
         knapsack_free(simpleGreedyKnapsack);
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     }
 
@@ -94,6 +104,7 @@ void run_demo_mode() {
 
     // Free allocated memory for Demo mode's item list.
     item_list_free(demoItemList);
+}
 
     // -- Completion of Demo mode run --//
     printf("Demo mode run completed.\n");
