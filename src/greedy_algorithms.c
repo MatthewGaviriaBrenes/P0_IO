@@ -7,21 +7,29 @@
 // If proportional param is true, use ratio of value to weight for selection (Proportional Greedy).
 // If proportional param is false, use value for selection (Simple Greedy).
 // Returns a KnapsackRun structure containing the execution time and a pointer to the filled knapsack bag.
-KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proportional) {
-    KnapsackRun result; // Structure to hold the result of the greedy algorithm run.
-    
+KnapsackRun *greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proportional) {    
     if (bag == NULL || itemList == NULL) {
         fprintf(stderr, "Error: Knapsack bag or items list is NULL.\n");
-        return result;
+        return NULL;
     }
     if (itemList->size == 0) {
         fprintf(stderr, "Error: Items list is empty.\n");
-        return result;;
+        return NULL;
     }
     if (bag->freeWeight <= 0) {
         fprintf(stderr, "Error: Knapsack bag has no available weight.\n");
-        return result;;
+        return NULL;
     }
+    
+    KnapsackRun *result = malloc(sizeof(KnapsackRun));
+    if (result == NULL) {
+        fprintf(stderr, "Error: Failed to allocate memory for knapsack run result.\n");
+        return NULL;
+    }
+
+    // Initialize the result structure.
+    result->executionTime = 0.0;
+    result->bag = NULL;
 
     // Set the start time to measure execution time of the greedy algorithm.
     clock_t startTimer = clock();
@@ -53,7 +61,7 @@ KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proport
 
     // Calculate execution time of the greedy algorithm in ms (with decimals) and store it in the result structure.
     clock_t endTimer = clock();
-    result.executionTime = ((double)(endTimer - startTimer)) / CLOCKS_PER_SEC * 1000; // Convert to milliseconds.
+    result->executionTime = ((double)(endTimer - startTimer)) / CLOCKS_PER_SEC * 1000; // Convert to milliseconds.
 
     // Show error message if no items were added to the knapsack after the greedy selection process.
     if (addedItemCount == 0) {
@@ -61,16 +69,16 @@ KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proport
     }
 
     // Add a pointer to the bag in its current state and return the result.
-    result.bag = bag;
+    result->bag = bag;
     return result;
 }
 
 // Wrapper function to run Simple Greedy algorithm to fill the knapsack.
-KnapsackRun simple_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
+KnapsackRun *simple_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
     return greedy_fill_knapsack(bag, itemList, false);
 }
 
 // Wrapper function to run Proportional Greedy algorithm to fill the knapsack.
-KnapsackRun proportional_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
+KnapsackRun *proportional_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
     return greedy_fill_knapsack(bag, itemList, true);
 }
