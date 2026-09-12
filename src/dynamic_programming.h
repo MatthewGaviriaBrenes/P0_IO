@@ -1,6 +1,6 @@
 // dynamic_programming.h
 // 0/1 Knapsack solver using bottom-up Dynamic Programming.
-// (Item / ItemList / Knapsack / KnapsackRunResult).
+// (Item / ItemList / Knapsack / KnapsackRun).
 
 #ifndef DYNAMIC_PROGRAMMING_H
 #define DYNAMIC_PROGRAMMING_H
@@ -12,7 +12,7 @@
 #include "knapsack_run.h"
 
 typedef struct {
-    KnapsackRunResult result;  // executionTime (ms) + resulting filled bag.
+    KnapsackRun result;  // executionTime (ms) + resulting filled bag.
     int **table;               // DP table, size rows x cols.
     int rows;                  // itemCount + 1
     int cols;                  // capacity + 1
