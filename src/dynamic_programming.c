@@ -134,11 +134,8 @@ void print_dp_table(const DPKnapsackResult *dpResult, const ItemList *itemsList)
 
     // Header row: one column per item i = 1..n.
     printf("%8s", "w \\ i");
-    for (int i = 0; i < dpResult->rows; i++) {
+    for (int i = 1; i < dpResult->rows; i++) {
         char label[32];
-        if (i == 0) {
-            snprintf(label, sizeof(label), "i=0");
-        } else {
             const Item *item = (itemsList != NULL)
                                     ? get_item_from_list(itemsList, (size_t) (i -1))
                                     : NULL;
@@ -147,7 +144,7 @@ void print_dp_table(const DPKnapsackResult *dpResult, const ItemList *itemsList)
             } else {
                 snprintf(label, sizeof(label), "i=%d", i);
             }
-        }
+ 
         printf("%12s", label);
     }
     printf("\n");
@@ -155,7 +152,7 @@ void print_dp_table(const DPKnapsackResult *dpResult, const ItemList *itemsList)
     // One row per capacity value w = 0..W, going down.
     for (int w = 0; w < dpResult->cols; w++) {
         printf("%8d", w);
-        for (int i = 0; i < dpResult->rows; i++) {
+        for (int i = 1; i < dpResult->rows; i++) {
             printf("%12d", dpResult->table[i][w]);
         }
         printf("\n");
