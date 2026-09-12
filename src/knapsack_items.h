@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
 
 #ifndef KNAPSACK_ITEM_H
 #define KNAPSACK_ITEM_H
