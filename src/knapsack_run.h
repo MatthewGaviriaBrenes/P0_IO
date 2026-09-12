@@ -26,9 +26,11 @@ typedef struct {
 } KnapsackRunList;
 
 // Create knapsack run result with given execution time (ms) and knapsack bag in heap.
+// Returns a KnapsackRun structure with zero values if an error occurs (e.g., NULL bag).
 KnapsackRun *knapsack_run_create(double executionTime, Knapsack *bag);
 
 // Free the memory allocated for a knapsack run result.
+// Also frees the knapsack bag in the run result.
 void knapsack_run_free(KnapsackRun *result);
 
 // Print the result of a knapsack run on the screen.
@@ -53,15 +55,11 @@ KnapsackRun *get_knapsack_run_result(const KnapsackRunList *log, size_t index);
 // Returns -1.0 if the list is NULL or empty (error state).
 double get_knapsack_run_avg_execution_time(const KnapsackRunList *log);
 
-// Check if the total value of items in two knapsack runs are equal.
-// Returns true if the values are equal, false otherwise.
-bool knapsack_run_total_value_match(const KnapsackRun *run1, const KnapsackRun *run2);
-
 // Get the ratio of matching total values between two knapsack run lists.
+// Values must match in the same order of runs in both lists to be considered a match.
 // Returns -1.0 if either list is NULL or empty (error state).
+// Returns 0.0 if no matches or mismatching run counts.
 // Returns a ratio between 0.0 and 1.0 for the number of matching runs.
 double get_knapsack_runs_match_ratio(const KnapsackRunList *baseline, const KnapsackRunList *comparison);
-
-//TODO: Add functions to output contents of knapsack run to TEX file.
 
 #endif // KNAPSACK_RUN_H

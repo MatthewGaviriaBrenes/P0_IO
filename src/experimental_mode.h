@@ -11,9 +11,9 @@
 #define EXPERIMENTAL_MODE_H
 
 // Values for the start, end and steps for Knapsack weight capacity.
-extern const int EXP_START_KNAPSACK_WEIGHT;
-extern const int EXP_END_KNAPSACK_WEIGHT;
-extern const int EXP_STEP_KNAPSACK_WEIGHT;
+extern const int EXP_START_KNAPSACK_WEIGHT_CAPACITY;
+extern const int EXP_END_KNAPSACK_WEIGHT_CAPACITY;
+extern const int EXP_STEP_KNAPSACK_WEIGHT_CAPACITY;
 
 // Values for the start, end and step values for Item county.
 extern const int EXP_START_ITEM_COUNT;
@@ -23,10 +23,18 @@ extern const int EXP_STEP_ITEM_COUNT;
 // Max value for each item when generating random item lists in Experimental mode.
 extern const int EXP_ITEM_MAX_VALUE;
 
+
+// Run the simple greedy algorithm for a specific knapsack case in Experimental mode.
+// Return NULL to indicate failure.
+KnapsackRun *exp_run_sgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
+
+// Run the proportional greedy algorithm for a specific knapsack case in Experimental mode.3
+// Return NULL to indicate failure.
+KnapsackRun *exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
+
 // Run the specific knapsack case, including random generation of items and using it 
 // Generates the random list of items and uses it to 
-void run_exp_case_group(int caseCount, int knapsackWeight, int itemCount);
-
+void run_exp_case_group(int caseCount, int knapsackMaxWeight, int itemCount);
 
 // Run the experimental mode.
 // Uses the number argument *n) passed by the "-E=n" parameter.

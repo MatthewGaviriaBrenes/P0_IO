@@ -30,13 +30,18 @@ int main(int argc, char *argv[])
         return 0;
     } else if (strncmp(argv[1], "-E=", 3) == 0)
     {
+        size_t value;
         char *end;
         errno = 0;
 
-        long value = strtol(argv[1] + 3, &end, 10);
+        value = (size_t)strtoul(argv[1] + 3, &end, 10);
 
         if (errno != 0 || end == argv[1] + 3 || *end != '\0') {
             printf("Invalid value for -E\n");
+            return 1;
+        }
+        if (value < 1) {
+            printf("Value for -E must be greater than 0\n");
             return 1;
         }
         run_exp_mode(value);

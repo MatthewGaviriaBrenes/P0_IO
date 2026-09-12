@@ -19,12 +19,14 @@ KnapsackRun *knapsack_run_create(double executionTime, Knapsack *bag) {
 }
 
 // Free the memory allocated for a knapsack run result.
+// Also frees the knapsack bag in the run result.
 void knapsack_run_free(KnapsackRun *result) {
     if (result == NULL) {
         return;
     }
     if (result->bag != NULL) {
         knapsack_free(result->bag);
+        result->bag = NULL;
     }
     free(result);
 }
@@ -57,7 +59,7 @@ void print_knapsack_run(const KnapsackRun *result) {
 }
 
 // Create a new list to store Knapsack run results.
-KnapsackRunList *knapsack_run__list_create(size_t listSize) {
+KnapsackRunList *knapsack_run_list_create(size_t listSize) {
     if (listSize == 0) {
         fprintf(stderr, "Error: List size must be greater than 0.\n");
         return NULL;
@@ -136,16 +138,34 @@ double get_knapsack_run_avg_execution_time(const KnapsackRunList *log) {
     return totalExecutionTime / log->count;
 }
 
-// Check if the total value of items in two knapsack runs are equal.
-// Returns true if the values are equal, false otherwise.
-bool knapsack_run_total_value_match(const KnapsackRun *run1, const KnapsackRun *run2) {
-    if (run1 == NULL || run2 == NULL) {
-        fprintf(stderr, "Error: One or both knapsack runs are NULL.\n");
-        return false;
+// Get the ratio of matching total values between two knapsack run lists.
+// Values must match in the same order of runs in both lists to be considered a match.
+// Default to 0 if the run counts are different, since they cannot be compared one-to-one.
+// Returns a ratio between 0.0 and 1.0 for the number of matching runs.
+double get_knapsack_runs_match_ratio(const KnapsackRunList *baseline, const KnapsackRunList *comparison) {
+    if (baseline == NULL || comparison == NULL) {
+        fprintf(stderr, "Error: One or both knapsack run lists are NULL. Defaulting to 0.\n");
+        return 0.0;
     }
-    if (run1->bag == NULL || run2->bag == NULL) {
-        fprintf(stderr, "Error: One or both knapsack bags are NULL.\n");
-        return false;
+    if (baseline->count == 0 || comparison->count == 0) {
+        fprintf(stderr, "Error: One or both knapsack run lists are empty. Defaulting to 0.\n");
+        return 0.0;
     }
-    return run1->bag->totalValue == run2->bag->totalValue;
+    if (baseline->count != comparison->count) {
+        fprintf(stderr, "Warning: Knapsack run lists have different counts. Ratio will be 0.\n");
+        return 0.0;
+    }
+
+    size_t matchingRuns = 0;     // Counter for matches.
+
+    for (size_t count = 0; count < baseline->count; count++) {
+        if (baseline->runs[count].bag != NULL && comparison->runs[count].bag != NULL) {
+            if (baseline->runs[count].bag->totalValue == comparison->runs[count].bag->totalValue) {
+                matchingRuns++;
+            }
+        }
+        // If either run entry for either bag is NULL somehow, assume mismatch.
+    }
+
+    return (double)matchingRuns / (double)baseline->count;
 }
