@@ -44,9 +44,9 @@ void run_demo_mode() {
         return;
     } 
     
-    // Store results in a KnapsackRunResult structure, then print results on screen for now.
+    // Store results in a KnapsackRun structure, then print results on screen for now.
     //TODO: Replace on-screen print with output to TEX file.
-    KnapsackRunResult simpleGreedyRun = simple_greedy_fill_knapsack(simpleGreedyKnapsack, demoItemList);
+    KnapsackRun simpleGreedyRun = simple_greedy_fill_knapsack(simpleGreedyKnapsack, demoItemList);
     print_knapsack_run_result(&simpleGreedyRun);
 
     // Reset item availability for the next algorithm run.
@@ -64,9 +64,9 @@ void run_demo_mode() {
         return;
     }
 
-    // Store results in a KnapsackRunResult structure, then print results on screen for now.
+    // Store results in a KnapsackRun structure, then print results on screen for now.
     //TODO: Replace on-screen print with output to TEX file.
-    KnapsackRunResult proportionalGreedyRun = proportional_greedy_fill_knapsack(proportionalGreedyKnapsack, demoItemList);
+    KnapsackRun proportionalGreedyRun = proportional_greedy_fill_knapsack(proportionalGreedyKnapsack, demoItemList);
     print_knapsack_run_result(&proportionalGreedyRun);
     
     // -- Completion of Demo mode run --//

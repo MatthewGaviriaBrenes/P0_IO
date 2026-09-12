@@ -6,9 +6,9 @@
 // Fill the knapsack using the Greedy algorithms.
 // If proportional param is true, use ratio of value to weight for selection (Proportional Greedy).
 // If proportional param is false, use value for selection (Simple Greedy).
-// Returns a KnapsackRunResult structure containing the execution time and a pointer to the filled knapsack bag.
-KnapsackRunResult greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proportional) {
-    KnapsackRunResult result; // Structure to hold the result of the greedy algorithm run.
+// Returns a KnapsackRun structure containing the execution time and a pointer to the filled knapsack bag.
+KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proportional) {
+    KnapsackRun result; // Structure to hold the result of the greedy algorithm run.
     
     if (bag == NULL || itemList == NULL) {
         fprintf(stderr, "Error: Knapsack bag or items list is NULL.\n");
@@ -66,11 +66,11 @@ KnapsackRunResult greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool p
 }
 
 // Wrapper function to run Simple Greedy algorithm to fill the knapsack.
-KnapsackRunResult simple_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
+KnapsackRun simple_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
     return greedy_fill_knapsack(bag, itemList, false);
 }
 
 // Wrapper function to run Proportional Greedy algorithm to fill the knapsack.
-KnapsackRunResult proportional_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
+KnapsackRun proportional_greedy_fill_knapsack(Knapsack *bag, ItemList *itemList) {
     return greedy_fill_knapsack(bag, itemList, true);
 }

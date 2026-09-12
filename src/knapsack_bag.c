@@ -3,7 +3,7 @@
 // Create a new knapsack with specified maximum weight and item capacity.
 // Item capacity is used for memory management of array used to store items.
 // Hint: Use size of available items to set knapsack's item capacity. 
-Knapsack *knapsack_create(int maxWeight, int itemCapacity) {
+Knapsack *knapsack_create(int maxWeight, size_t itemCapacity) {
     Knapsack *bag = malloc(sizeof(Knapsack));
     if (bag == NULL) {
         fprintf(stderr, "Error: Memory allocation failed for knapsack.\n");
@@ -76,7 +76,7 @@ Item *add_item_to_knapsack(Knapsack *bag, Item *item) {
 // Get an item from the knapsack by index.
 // Returns NULL pointer if index is out of bounds (e.g. no item at that index) 
 // or if the knapsack doesn't exist (NULL pointer).
-Item *get_item_from_knapsack(const Knapsack *bag, int index) {
+Item *get_item_from_knapsack(const Knapsack *bag, size_t index) {
     if (bag == NULL) {
         fprintf(stderr, "Error: Knapsack bag is NULL.\n");
         return NULL;
@@ -92,7 +92,7 @@ Item *get_item_from_knapsack(const Knapsack *bag, int index) {
 // Reallocate the knapsack's items' array to a new capacity, preserving existing items.
 // May not be needed, but it's there in case the items array has to accommodate more items.
 // May not need it, but it's there just in case.
-void expand_knapsack_item_capacity(Knapsack *bag, int newCapacity) {
+void expand_knapsack_item_capacity(Knapsack *bag, size_t newCapacity) {
     if (bag == NULL) {
         fprintf(stderr, "Error: Knapsack bag is NULL.\n");
         return;
