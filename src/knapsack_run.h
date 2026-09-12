@@ -12,6 +12,11 @@ typedef struct {
     Knapsack *bag;              // Pointer to generated knapsack bag.
 } KnapsackRunResult;
 
+typedef struct {
+
+
+} KnapsackRunList;
+
 // Print the result of a knapsack run on the screen.
 void print_knapsack_run_result(const KnapsackRunResult *result);
 

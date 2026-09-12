@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "knapsack_items.h"
 #include "knapsack_bag.h"
 #include "knapsack_run.h"
 #include "greedy_algorithms.h"
 #include "demo_mode.h"
+#include "experimental_mode.h"
 
 int main(int argc, char *argv[]) 
 {
@@ -28,15 +30,21 @@ int main(int argc, char *argv[])
         return 0;
     } else if (strncmp(argv[1], "-E=", 3) == 0)
     {
-        const char *e_value_input = argv[1] + 3;
-        int e_value = atoi(e_value_input);
+        char *end;
+        errno = 0;
 
-        printf("Running in Experimental mode - Input value: %d - Cases: %d\n", e_value, (e_value * 100));
-        // TODO: Run program in experimental mode.
+        long value = strtol(argv[1] + 3, &end, 10);
+
+        if (errno != 0 || end == argv[1] + 3 || *end != '\0') {
+            printf("Invalid value for -E\n");
+            return 1;
+        }
+        run_exp_mode(value);
         return 0;
+
     } else {
         // Report error due to unknown parameter.
         fprintf(stderr, "Unknown parameter: %s\n", argv[1]);
-        return 0;
+        return 1;
     }
 }
