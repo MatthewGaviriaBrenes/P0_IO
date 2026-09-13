@@ -70,12 +70,12 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
 
     // Lists to compile results of all runs for each algorithm in the case group.
     // dp (Dynamic Programming), sg (Simple Greedy), pg (Proportional Greedy)
-    
-    // DP algoritm results require two lists (one for the DP table and one for the knapsack run result).
-    DPKnapsackResult *dpResults = malloc(sizeof(DPKnapsackResult) * (size_t) caseCount);
     KnapsackRunList *dpRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *sgRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *pgRuns = knapsack_run_list_create(caseCount);
+    
+    // dpResults array contains the full information for DP runs (e.g. DP solution table, run results).
+    DPKnapsackResult *dpResults = malloc(sizeof(DPKnapsackResult) * (size_t) caseCount);
 
     // Abort execution if any of the run lists could not be created.
     //TODO: Update after integrating DP executions (wait for Josue).
@@ -121,7 +121,7 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
 
         // Run the Simple Greedy algorithm and store the run result in the proper run list.
         KnapsackRun sgRun = exp_run_sgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
-        if (sgRun.bag == NULL || sgRun.executionTime <= 0) {
+        if (sgRun.bag == NULL) {
             fprintf(stderr, "Error: Simple Greedy algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
@@ -137,7 +137,7 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
         // Run the Proportional Greedy algorithm and store the run result in the proper run list.
 
         KnapsackRun pgRun = exp_run_pgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
-        if (pgRun.bag == NULL || pgRun.executionTime <= 0) {
+        if (pgRun.bag == NULL) {
             fprintf(stderr, "Error: Proportional Greedy algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
@@ -152,12 +152,15 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     // --- Getting average execution times for SG, PG and DP algorithms --- 
     // Get average execution times for all three algorithms in the case group.
     //TODO: Update after integrating DP executions (wait for Josue).
+    double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dpRuns);
     double avgSimpleGreedyTime = get_knapsack_run_avg_execution_time(sgRuns);
     double avgProportionalGreedyTime = get_knapsack_run_avg_execution_time(pgRuns);
+    
 
     printf("\n-- Algorithm Average Execution Times for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
-    printf("> Simple Greedy: %.5f ms\n", avgSimpleGreedyTime);
-    printf("> Proportional Greedy: %.5f ms\n", avgProportionalGreedyTime);
+    printf("> Dynamic Programming: %.6f ms\n", avgDynamicProgrammingTime);
+    printf("> Simple Greedy: %.6f ms\n", avgSimpleGreedyTime);
+    printf("> Proportional Greedy: %.6f ms\n", avgProportionalGreedyTime);
 
     //double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dynamicProgrammingRuns);
     //TODO: Send to TEX file.
