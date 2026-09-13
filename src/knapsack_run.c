@@ -151,5 +151,5 @@ double get_knapsack_runs_match_ratio(const KnapsackRunList *baselineRuns, const 
         }
         // If either run entry for either bag is NULL somehow, assume mismatch.
     }
-    return (double)matchingRuns / (double)baselineRuns->count;
+    return (double) matchingRuns / (double) baselineRuns->count;
 }

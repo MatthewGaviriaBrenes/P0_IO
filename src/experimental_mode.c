@@ -166,10 +166,10 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     //TODO: Send average execution times to TEX file.
     //TODO: Update after integrating DP executions (wait for Josue).
     // The match ratio is the percentage of times the Greedy algorithms produced the same total value as the Dynamic Programming algorithm for the same case.
-    double dp_sg_match_ration = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
+    double dp_sg_match_ratio = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
     double dp_pg_match_ratio = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
     printf("\n-- Algorithm Match Ratios for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
-    printf("> Simple Greedy vs Dynamic Programming: %.2f%%\n", dp_sg_match_ration * 100.0);
+    printf("> Simple Greedy vs Dynamic Programming: %.2f%%\n", dp_sg_match_ratio * 100.0);
     printf("> Proportional Greedy vs Dynamic Programming: %.2f%%\n", dp_pg_match_ratio * 100.0);
 
     //TODO: Send to TEX file.
