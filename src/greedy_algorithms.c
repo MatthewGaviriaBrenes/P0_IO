@@ -26,7 +26,8 @@ KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proport
     }
 
     // Set the start time to measure execution time of the greedy algorithm.
-    clock_t startTimer = clock();
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
 
     size_t addedItemCount = 0; // Counter for items added to the knapsack.
     while (bag->freeWeight > 0) {
@@ -52,10 +53,11 @@ KnapsackRun greedy_fill_knapsack(Knapsack *bag, ItemList *itemList, bool proport
             } 
         }
     }
+    clock_gettime(CLOCK_MONOTONIC, &end);
 
     // Calculate execution time of the greedy algorithm in ms (with decimals) and store it in the result structure.
-    clock_t endTimer = clock();
-    result.executionTime = ((double)(endTimer - startTimer)) / CLOCKS_PER_SEC * 1000; // Convert to milliseconds.
+    const double elapsedMs = (end.tv_sec - start.tv_sec) * 1000.0 + (end.tv_nsec - start.tv_nsec) / 1e6;
+    result.executionTime = elapsedMs;
 
     // Show error message if no items were added to the knapsack after the greedy selection process.
     if (addedItemCount == 0) {

@@ -24,7 +24,7 @@ void print_knapsack_run(KnapsackRun result) {
         return;
     }    
     printf("Knapsack Run Result:\n");
-    printf("Execution Time: %.5f ms\n", result.executionTime);
+    printf("Execution Time: %.6f ms\n", result.executionTime);
     if (result.bag != NULL) {
         printf("Knapsack Bag - Max Capacity: %d, Available Capacity: %d, Item Count: %ld\n",
                result.bag->maxWeight, result.bag->freeWeight, result.bag->itemCount);
