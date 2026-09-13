@@ -36,7 +36,7 @@ This will be used for guidance on what needs to be implemented.
   * [X] Add item to knapsack, update available weight.
   * [ ] TBD - Consider additional functions for Knapsack bag management.
   * [ ] TBD - Consider copy function to duplicate knapsack.
-* [ ] Capture execution time for algorithm run.
+* [X] Capture execution time for algorithm run.
 
 ## 4 - Greedy algorithm
 
@@ -63,19 +63,14 @@ This will be used for guidance on what needs to be implemented.
 * [X] Update available weight in bag and repeat search until no new items can be added.
 * [X] Capture execution time for algorithm run.
 
-## 6 - Knapsack Distribution Matrix (Important for 1/0 Knapsack DP)
+## 6 - 1/0 Knapsack DP algorithm
 
-* [ ] Define data structure: List of Knapsack Bags with different weights?
-* [ ] ...TO BE DEFINED...
+* [X] Input parameters:
+  * [X] Available items to fill Knapsack.
+  * [X] Knapsack Bag's max weight.
+* [X] Implementation of DP resolution table and collection of run metadata.
 
-## 7 - 1/0 Knapsack DP algorithm
-
-* [ ] Input parameters:
-  * [ ] Available items to fill Knapsack.
-  * [ ] Knapsack Bag's max weight.
-* [ ] ... TO BE DEFINED ... (Review available info on the algorithm)
-
-## 8 - Demo Mode
+## 7 - Demo Mode
 
 Resolves a random Knapsack problem with the following constraints:
 
@@ -84,11 +79,11 @@ Resolves a random Knapsack problem with the following constraints:
 * Value for each item: 1..20
 * Weight for each item: 1..7
 
-* [ ] Run 1/0 DP algorithm.
+* [X] Run 1/0 DP algorithm.
 * [X] Run Greedy algorithm.
 * [X] Run Proportional Greedy algorithm.
 
-## 9 - Experimental Mode
+## 8 - Experimental Mode
 
 Resolves 100 * n Knapsack problems with the following constraints for each problem run:
 
@@ -100,20 +95,17 @@ For each Knapsack problem run, the available items are randomized:
 * Value for each item: 1..100 (randomized)
 * Weight for each item: 1..(40% of bag capacity) (randomized)
 
-For each Knapsack problem:
+For each Knapsack problem group (100 groups):
+* [X] Iteration setup for the 100*n cases.
+* [X] Execution of case 1..n for each one of the 100 groups.
+  * [X] Run 1/0 DP algorithm.
+  * [X] Run Greedy algorithm.
+  * [X] Run Proportional Greedy algorithm.
+* [X] Collect average execution times for all three algorithms for the group.
+* [X] Compare hit ratio of Greedy algoritm runs agains DP runs.
+* [ ] Send collected information from Knapsack problem group run to TEX file. Current setup clears data after each group run to minimize memory usage.
 
-* [ ] Run 1/0 DP algorithm
-* [ ] Run Greedy algorithm
-* [ ] Run Proportional Greedy algorithm
-
-## 10 - Capturing execution metadata
-
-* [ ] Track execution time of each algorithm run.
-* [ ] For Experimental Mode:
-  * [ ] Compare accuracy of Greedy algorithms on finding the optimal result against DP runs (always optimal.)
-  * [ ] Use two tables to compile accuracy results for each Greedy algorithm (simple, proportional).
-
-## 11 - Generate TEX file
+## 9 - Generate TEX file
 
 * [ ] Define method to generate TEX file programmatically (possible choice: libtex).
 * [ ] Define baseline structure for generated TEX file.
@@ -126,6 +118,6 @@ For each Knapsack problem:
   * [ ] Should include colors (red/green).
 * [ ] Include Greedy algorithms' accuracy tables.
 
-## 12 - Generate PDF file
+## 10 - Generate PDF file
 
 * [ ] Use generated TEX file to create PDF file (possible method: pdflatex).

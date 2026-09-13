@@ -19,7 +19,7 @@ Item *item_create(int value, int weight) {
 }
 
 // Calculate the ratio of value to weight for a knapsack item. Returns -1 if there were errors.
-int get_item_ratio(const Item *item) {
+double get_item_ratio(const Item *item) {
     if (item == NULL) {
         fprintf(stderr, "Error: Item is NULL.\n");
         return -1;
@@ -28,7 +28,7 @@ int get_item_ratio(const Item *item) {
         fprintf(stderr, "Error: Item weight is zero, cannot calculate ratio.\n");
         return -1; // Error code for division by zero.
     }
-    return item->value / item->weight;
+    return (double) item->value / item->weight;
 }
 
 // Create an array to store a specific amount of items to fill the knapsack.
@@ -123,12 +123,12 @@ Item* get_most_valuable_item(const ItemList *itemsList, int weightLimit, bool pr
 
     // Pointer and value of the best item found so far. Initialize to NULL and zero to indicate no item found yet.
     Item *bestItem = NULL; 
-    int bestValue = 0;
+    double bestValue = 0.0;
 
     for (size_t index = 0; index < itemsList->size; index++) {
         Item *item = &(itemsList->items[index]);
         if (item->available && item->weight <= weightLimit) {
-            int currentValue = proportional ? get_item_ratio(item) : item->value;
+            double currentValue = proportional ? get_item_ratio(item) : item->value;
             if (currentValue > bestValue) {
                 bestValue = currentValue;
                 bestItem = item;
@@ -162,12 +162,12 @@ size_t get_most_valuable_item_index(const ItemList *itemsList, int weightLimit, 
     }
 
     size_t bestIndex = LIST_ERROR; // Initialize to an invalid index to indicate no item found yet.
-    int bestValue = 0; // Initialize to zero (raw value or value ratio of an item will never be zero).
+    double bestValue = 0.0; // Initialize to zero (raw value or value ratio of an item will never be zero).
 
     for (size_t index = 0; index < itemsList->size; index++) {
         Item *item = &(itemsList->items[index]);
         if (item->available && item->weight <= weightLimit) {
-            int currentValue = proportional ? get_item_ratio(item) : item->value;
+            double currentValue = proportional ? get_item_ratio(item) : item->value;
             if (currentValue > bestValue) {
                 bestValue = currentValue;
                 bestIndex = index;

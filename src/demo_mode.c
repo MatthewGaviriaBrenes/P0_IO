@@ -22,38 +22,58 @@ void run_demo_mode() {
     }
 
     // -- 1/0 Knapsack DP run for demo mode -- //
-    // TODO: To be added after implementing the resepctive algorithm.
 
     Knapsack *dpKnapsackRun = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
     // Abort execution if knapsack creation failed for DP run.
     if (dpKnapsackRun == NULL) {
         fprintf(stderr, "Error: Failed to create knapsack for 1/0 DP run.\n");
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     } 
-    //TODO: Implement 1/0 Knapsack DP algorithm and measure execution time.
+    printf("\n--- Running Knapsack Dynamic Programming algorithm for Demo mode.\n");
+    DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsackRun, demoItemList);
+    
+    print_dp_table(&dpResult, demoItemList);
+    print_knapsack_run(dpResult.result);
+    
+    dp_result_free_table(&dpResult);
+    knapsack_free(dpKnapsackRun);
+  
+    // Reset item availability for the next algorithm run.
+    reset_item_list_availability(demoItemList); 
 
     // -- Simple Greedy run for demo mode -- //
-    printf("\n--- Running Simple Greedy algorithm for Ddemo mode.\n");
+    printf("\n--- Running Simple Greedy algorithm for Demo mode.\n");
     Knapsack *simpleGreedyKnapsack = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
    
     // Abort execution if knapsack creation failed for Simple Greedy run.
     if (simpleGreedyKnapsack == NULL) {
         fprintf(stderr, "Error: Failed to create knapsack for Simple Greedy run.\n");
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     } 
     
-    // Store results in a KnapsackRunResult structure, then print results on screen for now.
+    // Store results in a KnapsackRun structure, then print results on screen for now.
     //TODO: Replace on-screen print with output to TEX file.
-    KnapsackRunResult simpleGreedyRun = simple_greedy_fill_knapsack(simpleGreedyKnapsack, demoItemList);
-    print_knapsack_run_result(&simpleGreedyRun);
-
+    KnapsackRun simpleGreedyRun = simple_greedy_fill_knapsack(simpleGreedyKnapsack, demoItemList);
+    
+    if (simpleGreedyRun.bag == NULL || simpleGreedyRun.executionTime <= 0) {
+        fprintf(stderr, "Error: Simple Greedy algorithm failed to produce a valid knapsack bag.\n");
+        knapsack_free(simpleGreedyKnapsack);
+        item_list_free(demoItemList);
+        return;
+    } 
+    
+    print_knapsack_run(simpleGreedyRun);
+    
+    
     // Reset item availability for the next algorithm run.
     reset_item_list_availability(demoItemList); 
 
     // -- Proportional Greedy run for demo mode. -- //
-    printf("\n--- Running Proportional Greedy algorithm for Ddemo mode.\n");
+    printf("\n--- Running Proportional Greedy algorithm for Demo mode.\n");
     Knapsack *proportionalGreedyKnapsack = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
 
     // Abort execution if knapsack creation failed for Proportional Greedy run.
@@ -61,19 +81,29 @@ void run_demo_mode() {
         fprintf(stderr, "Error: Failed to create knapsack for Proportional Greedy run.\n");
         knapsack_free(simpleGreedyKnapsack);
         item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
         return;
     }
 
-    // Store results in a KnapsackRunResult structure, then print results on screen for now.
+    // Store results in a KnapsackRun structure, then print results on screen for now.
     //TODO: Replace on-screen print with output to TEX file.
-    KnapsackRunResult proportionalGreedyRun = proportional_greedy_fill_knapsack(proportionalGreedyKnapsack, demoItemList);
-    print_knapsack_run_result(&proportionalGreedyRun);
-    
+    KnapsackRun proportionalGreedyRun = proportional_greedy_fill_knapsack(proportionalGreedyKnapsack, demoItemList);
+    if (proportionalGreedyRun.bag == NULL || proportionalGreedyRun.executionTime <= 0) {
+        fprintf(stderr, "Error: Proportional Greedy algorithm failed to produce a valid knapsack bag.\n");
+        knapsack_free(proportionalGreedyKnapsack);
+        item_list_free(demoItemList);
+        knapsack_free(dpKnapsackRun);
+        return;
+    }
+
+    print_knapsack_run(proportionalGreedyRun);
+
+    knapsack_free(simpleGreedyRun.bag);
+    knapsack_free(proportionalGreedyRun.bag);
+
+    // Free allocated memory for Demo mode's item list.
+    item_list_free(demoItemList);
+
     // -- Completion of Demo mode run --//
     printf("Demo mode run completed.\n");
-
-    // Free allocated memory for knapsacks and item list.
-    knapsack_free(simpleGreedyKnapsack);
-    knapsack_free(proportionalGreedyKnapsack);
-    item_list_free(demoItemList);
 }
