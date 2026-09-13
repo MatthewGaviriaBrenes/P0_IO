@@ -9,6 +9,7 @@
 #include "knapsack_items.h"
 #include "knapsack_bag.h"
 #include "knapsack_run.h"
+#include "dynamic_programming.h"
 #include "greedy_algorithms.h"
 #include "demo_mode.h"
 #include "experimental_mode.h"

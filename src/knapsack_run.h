@@ -26,15 +26,11 @@ typedef struct {
 } KnapsackRunList;
 
 // Create knapsack run result with given execution time (ms) and knapsack bag in heap.
-// Returns a KnapsackRun structure with zero values if an error occurs (e.g., NULL bag).
-KnapsackRun *knapsack_run_create(double executionTime, Knapsack *bag);
-
-// Free the memory allocated for a knapsack run result.
-// Also frees the knapsack bag in the run result.
-void knapsack_run_free(KnapsackRun *result);
+// Returns a zero-initialized KnapsackRun if an error occurs (e.g., NULL bag).
+KnapsackRun knapsack_run_create(double executionTime, Knapsack *bag);
 
 // Print the result of a knapsack run on the screen.
-void print_knapsack_run(const KnapsackRun *result);
+void print_knapsack_run(KnapsackRun result);
 
 // Create a new list to store Knapsack run results.
 KnapsackRunList *knapsack_run_list_create(size_t listSize);
@@ -44,8 +40,8 @@ KnapsackRunList *knapsack_run_list_create(size_t listSize);
 void knapsack_run_list_free(KnapsackRunList *log);
 
 // Add a new Knapsack run result entry to a Knapasck Run list.
-// Returns pointer to the newly added entry, or NULL if there were errors.
-KnapsackRun *knapsack_run_list_add_entry(KnapsackRunList *log, KnapsackRun newEntry);
+// Returns true if the entry was added successfully, false otherwise.
+bool knapsack_run_list_add_entry(KnapsackRunList *log, KnapsackRun newEntry);
 
 // Get the results of a knapsack run from a list in a given index.
 // Returns NULL if the index is out of bounds or if the list is NULL.

@@ -15,41 +15,48 @@ const size_t EXP_STEP_ITEM_COUNT = 10;
 // Max value for each item when generating random item lists in Experimental mode.
 const int EXP_ITEM_MAX_VALUE = 100;
 
-
-// Run the simple greedy algorithm for a specific knapsack case in Experimental mode.
-// Return NULL to indicate failure.
-KnapsackRun *exp_run_sgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
+// Run the dynamic programming algorithm for a specific knapsack case in Experimental mode.
+// Return empty result to indicate failure.
+// Returned DPKnapsackResult structure contains both the DP resolution table 
+// and the KnapsackRun result (execution time + filled bag).
+DPKnapsackResult exp_run_dpAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
     // Create a knapsack with the specified weight and item capacity.
     Knapsack *knapsack = knapsack_create(knapsackMaxWeight, itemList->size);
     if (knapsack == NULL) {
+        fprintf(stderr, "Error: Failed to create knapsack for Dynamic Programming algorithm.\n");
+        DPKnapsackResult emptyResult = {0};
+        return emptyResult;
+    }
+    return dp_knapsack_solve(knapsack, itemList);
+}
+
+// Run the simple greedy algorithm for a specific knapsack case in Experimental mode.
+// Returns a zero-initialized result to indicate failure.
+KnapsackRun exp_run_sgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
+    // Create a knapsack with the specified weight and item capacity.
+    Knapsack *knapsack = knapsack_create(knapsackMaxWeight, itemList->size);
+    
+    if (knapsack == NULL) {
         fprintf(stderr, "Error: Failed to create knapsack for Simple Greedy algorithm.\n");
-        return NULL;
+        return (KnapsackRun){0};
     }
 
     return simple_greedy_fill_knapsack(knapsack, itemList);
 }
 
 // Run the proportional greedy algorithm for a specific knapsack case in Experimental mode.
-// Return NULL to indicate failure.
-KnapsackRun *exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
+// Returns a zero-initialized result to indicate failure.
+KnapsackRun exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
     // Create a knapsack with the specified weight and item capacity.
     Knapsack *knapsack = knapsack_create(knapsackMaxWeight, itemList->size);
+    
     if (knapsack == NULL) {
-        fprintf(stderr, "Error: Failed to create knapsack for Proportional Greedy algorithm.\n");
-        return NULL; 
+        fprintf(stderr, "Error: Failed to create knapsack for Simple Greedy algorithm.\n");
+        return (KnapsackRun){0};
     }
 
-    // Run the Proportional Greedy algorithm and return the result.
-    KnapsackRun *result = malloc(sizeof(KnapsackRun));
-    if (result == NULL) {
-        fprintf(stderr, "Error: Failed to allocate memory for Proportional Greedy run result.\n");
-        knapsack_free(knapsack);
-        return NULL; 
-    }
     return proportional_greedy_fill_knapsack(knapsack, itemList);
 }
-
-
 
 // Run a group of cases for the experimental mode.
 // caseGroupParameter is used to track a case group.
@@ -63,13 +70,16 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
 
     // Lists to compile results of all runs for each algorithm in the case group.
     // dp (Dynamic Programming), sg (Simple Greedy), pg (Proportional Greedy)
-    // KnapsackRunList *dpRuns = knapsack_run_list_create((size_t) caseCount);
+    
+    // DP algoritm results require two lists (one for the DP table and one for the knapsack run result).
+    DPKnapsackResult *dpResults = malloc(sizeof(DPKnapsackResult) * (size_t) caseCount);
+    KnapsackRunList *dpRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *sgRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *pgRuns = knapsack_run_list_create(caseCount);
 
     // Abort execution if any of the run lists could not be created.
     //TODO: Update after integrating DP executions (wait for Josue).
-    if (/*drRuns == NULL ||*/ sgRuns == NULL || pgRuns == NULL) {
+    if (dpRuns == NULL || sgRuns == NULL || pgRuns == NULL) {
         fprintf(stderr, "Error: Could not create run lists for experimental mode. Aborting execution of program.\n");
         exit(EXIT_FAILURE);
     }
@@ -83,7 +93,6 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     
     // Loop for case run number.
     for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-
         printf("\n-- Running case %d of %zu for Knapsack Weight: %d, Item Count: %zu --\n", caseNum + 1, caseCount, knapsackMaxWeight, itemCount);
 
         // Create item list for the case.
@@ -97,36 +106,43 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
         //TODO: Add after implementing the dynamic programming algorithm.
         //reset_item_list_availability(itemLists[caseNum]);
         // --------------------------- //
+        dpResults[caseNum] = exp_run_dpAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
+        if (dpResults[caseNum].table == NULL || dpResults[caseNum].result.bag == NULL) {
+            fprintf(stderr, "Error: Dynamic Programming algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
+            exit(EXIT_FAILURE);
+        }
+        if (!knapsack_run_list_add_entry(dpRuns, dpResults[caseNum].result)) {
+            fprintf(stderr, "Error: Failed to add Dynamic Programming run result to the run list for case %d.\n", caseNum + 1);
+            exit(EXIT_FAILURE);
+        }
+        print_dp_table(&dpResults[caseNum], itemLists[caseNum]);
+        print_knapsack_run(dpResults[caseNum].result);
+        reset_item_list_availability(itemLists[caseNum]);
 
         // Run the Simple Greedy algorithm and store the run result in the proper run list.
-        KnapsackRun *sgRun = exp_run_sgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
-        if (sgRun == NULL) {
+        KnapsackRun sgRun = exp_run_sgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
+        if (sgRun.bag == NULL || sgRun.executionTime <= 0) {
             fprintf(stderr, "Error: Simple Greedy algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
-        // Add the run result to the Simple Greedy run list. 
-        // Abort execution if the entry could not be added.
-        if (knapsack_run_list_add_entry(sgRuns, *sgRun) == NULL) {
+
+        if (!knapsack_run_list_add_entry(sgRuns, sgRun)) {
             fprintf(stderr, "Error: Failed to add Simple Greedy run result to the run list for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
-        } 
+        }
+        
         print_knapsack_run(sgRun);
         reset_item_list_availability(itemLists[caseNum]);
 
         // Run the Proportional Greedy algorithm and store the run result in the proper run list.
-        KnapsackRun *pgRun = exp_run_pgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
-        if (pgRun == NULL) {
+
+        KnapsackRun pgRun = exp_run_pgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
+        if (pgRun.bag == NULL || pgRun.executionTime <= 0) {
             fprintf(stderr, "Error: Proportional Greedy algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
-            knapsack_run_list_free(sgRuns);
             exit(EXIT_FAILURE);
         }
-        // Add the run result to the Proportional Greedy run list. 
-        // Abort execution if the entry could not be added.
-        if (knapsack_run_list_add_entry(pgRuns, *pgRun) == NULL) {
+        if (!knapsack_run_list_add_entry(pgRuns, pgRun)) {
             fprintf(stderr, "Error: Failed to add Proportional Greedy run result to the run list for case %d.\n", caseNum + 1);
-
-            knapsack_run_list_free(sgRuns);
-            knapsack_run_list_free(pgRuns);
             exit(EXIT_FAILURE);
         }
         print_knapsack_run(pgRun);
@@ -149,20 +165,34 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     // --- Getting match ratios (SG/PG vs DP) --- 
     //TODO: Send average execution times to TEX file.
     //TODO: Update after integrating DP executions (wait for Josue).
-    //double sg_dp_match_ratio = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
-    //double pg_dp_match_ratio = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
+    // The match ratio is the percentage of times the Greedy algorithms produced the same total value as the Dynamic Programming algorithm for the same case.
+    double dp_sg_match_ration = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
+    double dp_pg_match_ratio = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
+    printf("\n-- Algorithm Match Ratios for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
+    printf("> Simple Greedy vs Dynamic Programming: %.2f%%\n", dp_sg_match_ration * 100.0);
+    printf("> Proportional Greedy vs Dynamic Programming: %.2f%%\n", dp_pg_match_ratio * 100.0);
+
     //TODO: Send to TEX file.
 
     // --- Memory Cleanup ---
     // Clean run results first
     knapsack_run_list_free(sgRuns);
     knapsack_run_list_free(pgRuns);
-    //knapsack_run_list_free(dpRuns);
+    knapsack_run_list_free(dpRuns);
+
+    // Clear DP tables for each case in the case group.
+    for (size_t caseNum = 0; caseNum < caseCount; caseNum++) {
+        dp_result_free_table(&dpResults[caseNum]);
+    }
 
     // Clean item lists
-    for (int caseNum = 0; caseNum < caseCount; caseNum++) {
+    for (size_t caseNum = 0; caseNum < caseCount; caseNum++) {
         item_list_free(itemLists[caseNum]);
     }
+
+    //DEBUG: Wait for user input before continuing to the next case group.
+    printf("\nPress Enter to continue to the next case group...");
+    getchar();
 }
 
 // Run the experimental mode.

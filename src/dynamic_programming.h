@@ -2,14 +2,14 @@
 // 0/1 Knapsack solver using bottom-up Dynamic Programming.
 // (Item / ItemList / Knapsack / KnapsackRun).
 
-#ifndef DYNAMIC_PROGRAMMING_H
-#define DYNAMIC_PROGRAMMING_H
-
 #include <stdbool.h>
 
 #include "knapsack_items.h"
 #include "knapsack_bag.h"
 #include "knapsack_run.h"
+
+#ifndef DYNAMIC_PROGRAMMING_H
+#define DYNAMIC_PROGRAMMING_H
 
 typedef struct {
     KnapsackRun result;  // executionTime (ms) + resulting filled bag.
