@@ -78,6 +78,9 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     KnapsackRunList *sgRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *pgRuns = knapsack_run_list_create(caseCount);
 
+    // dpResults holds the full results of DP runs (solution tables and run results).
+    DPKnapsackResult *dpResults = malloc(sizeof(DPKnapsackResult) * caseCount);
+
     // Abort execution if any of the run lists could not be created.
     //TODO: Update after integrating DP executions (wait for Josue).
     if (dpRuns == NULL || sgRuns == NULL || pgRuns == NULL) {
@@ -122,7 +125,7 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
 
         //Add run result to Dynamic Programming run list
         //Abort execution if the entry could not be added
-        if (knapsack_run_list_add_entry(dpRuns, dpResult.result) == NULL) {
+        if (!knapsack_run_list_add_entry(dpRuns, dpResult.result)) {
             fprintf(stderr, "Error: Failed to add Dynamic Programming run result to the run list for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
@@ -139,7 +142,7 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
             exit(EXIT_FAILURE);
         }
         print_dp_table(&dpResults[caseNum], itemLists[caseNum]);
-        print_knapsack_run(dpResults[caseNum].result);
+        //print_knapsack_run(dpResults[caseNum].result);
         reset_item_list_availability(itemLists[caseNum]);
 
 
@@ -178,7 +181,6 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dpRuns);
     double avgSimpleGreedyTime = get_knapsack_run_avg_execution_time(sgRuns);
     double avgProportionalGreedyTime = get_knapsack_run_avg_execution_time(pgRuns);
-    double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dpRuns);
 
     result.dynamicProgrammingTime = avgDynamicProgrammingTime;
     result.simpleGreedyTime = avgSimpleGreedyTime;
@@ -187,7 +189,6 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     result.simpleGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
     result.proportionalGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
     
-
     //double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dynamicProgrammingRuns);
     //TODO: Send to TEX file.
 

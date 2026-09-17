@@ -30,7 +30,7 @@ typedef struct {
 KnapsackRun knapsack_run_create(double executionTime, Knapsack *bag);
 
 // Print the result of a knapsack run on the screen.
-void print_knapsack_run(KnapsackRun result);
+//void print_knapsack_run(KnapsackRun result);
 
 // Create a new list to store Knapsack run results.
 KnapsackRunList *knapsack_run_list_create(size_t listSize);
