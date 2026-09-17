@@ -32,7 +32,7 @@ void knapsack_run_free(KnapsackRun *result) {
 }
 
 // Print the result of a knapsack run on the screen.
-void print_knapsack_run(const KnapsackRun *result) {
+/*void print_knapsack_run(const KnapsackRun *result) {
     if (result == NULL) {
         fprintf(stderr, "Error: Knapsack run result is NULL.\n");
         return;
@@ -56,7 +56,7 @@ void print_knapsack_run(const KnapsackRun *result) {
     } else {
         printf("Knapsack Bag is NULL.\n");
     }
-}
+}*/
 
 // Create a new list to store Knapsack run results.
 KnapsackRunList *knapsack_run_list_create(size_t listSize) {
@@ -166,6 +166,5 @@ double get_knapsack_runs_match_ratio(const KnapsackRunList *baseline, const Knap
         }
         // If either run entry for either bag is NULL somehow, assume mismatch.
     }
-
     return (double)matchingRuns / (double)baseline->count;
 }

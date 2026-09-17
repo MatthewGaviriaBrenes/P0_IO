@@ -97,6 +97,7 @@ DPKnapsackResult dp_knapsack_solve(Knapsack *bag, const ItemList *itemsList) {
             }
         }
     }
+    bag->totalValue = table[n][capacity];
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     const double elapsedMs = (end.tv_sec - start.tv_sec) * 1000.0

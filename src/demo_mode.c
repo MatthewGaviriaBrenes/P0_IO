@@ -1,6 +1,8 @@
 // demo_mode.c
 
 #include "demo_mode.h"
+#include "tex_generator.h"
+#include <string.h>
 
 const int DEMO_MAX_KNAPSACK_CAPACITY = 15;
 const int DEMO_MAX_ITEMS = 6;
@@ -11,6 +13,7 @@ void run_demo_mode() {
     printf("Running in Demo mode.\n");
     // Create a random set of knapsack items for demo mode.
     printf("\n--- Generating list of random items for run...\n");
+
     ItemList *demoItemList = item_list_create_random(DEMO_MAX_ITEMS, DEMO_MAX_ITEM_VALUE, DEMO_MAX_ITEM_WEIGHT);
 
     // Abort execution if item list creation failed.
@@ -20,6 +23,24 @@ void run_demo_mode() {
     } else {
         print_items_list(demoItemList);
     }
+
+    //Create .tex
+    char texFilename[64];
+
+    tex_gen_filename(texFilename, sizeof(texFilename));
+
+    FILE *texFile = tex_create_file(texFilename);
+
+    if (texFile == NULL) {
+        item_list_free(demoItemList);
+        return;
+    }
+
+    tex_preamble(texFile, 
+        "0/1 Knapsack Problem - Demo Mode");
+
+    tex_problem(texFile,demoItemList,
+        DEMO_MAX_KNAPSACK_CAPACITY);
 
     // -- 1/0 Knapsack DP run for demo mode -- //
     // TODO: To be added after implementing the resepctive algorithm.
@@ -36,7 +57,10 @@ void run_demo_mode() {
     DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsackRun, demoItemList);
     
     print_dp_table(&dpResult, demoItemList);
-    print_knapsack_run(&dpResult.result);
+    //print_knapsack_run(&dpResult.result);
+
+    //Writes result on .tex
+    tex_dp_table(texFile, &dpResult, demoItemList);
     
     dp_result_free_table(&dpResult);
     knapsack_free(dpKnapsackRun);
@@ -67,7 +91,7 @@ void run_demo_mode() {
         return;
     } 
     
-    print_knapsack_run(simpleGreedyRun);
+    //print_knapsack_run(simpleGreedyRun);
     
     // Free the memory allocated for the Simple Greedy run result once it is no longer needed.
     knapsack_run_free(simpleGreedyRun);
@@ -97,14 +121,42 @@ void run_demo_mode() {
         item_list_free(demoItemList);
         return;
     }
-    print_knapsack_run(proportionalGreedyRun);
+    //print_knapsack_run(proportionalGreedyRun);
 
     // Free the memory allocated for the Proportional Greedy run result once it is no longer needed.
     knapsack_run_free(proportionalGreedyRun); 
 
     // Free allocated memory for Demo mode's item list.
     item_list_free(demoItemList);
-}
+
+    tex_end(texFile);
+    fclose(texFile);
+
+    //Create PDF
+    char command[128];
+    char auxFilename[128];
+    char logFilename[128];
+
+    snprintf(command,sizeof(command),
+        "pdflatex -interaction=nonstopmode \"%s\"",texFilename);
+
+    snprintf(auxFilename, sizeof(auxFilename), "%s", texFilename);
+    snprintf(logFilename, sizeof(logFilename), "%s", texFilename);
+
+    int status = system(command);
+
+    if (status != 0) {
+        fprintf(stderr, "Error: Failed to generate PDF from TEX file.\n");
+        return;
+    }
+    auxFilename[strlen(auxFilename) - 3] = '\0';
+    logFilename[strlen(logFilename) - 3] = '\0';
+
+    strcat(auxFilename, "aux");
+    strcat(logFilename, "log");
+
+    remove(auxFilename);
+    remove(logFilename);
 
     // -- Completion of Demo mode run --//
     printf("Demo mode run completed.\n");
