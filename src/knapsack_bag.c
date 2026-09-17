@@ -12,6 +12,7 @@ Knapsack *knapsack_create(int maxWeight, size_t itemCapacity) {
 
     bag->maxWeight = maxWeight;
     bag->freeWeight = maxWeight;
+    bag->totalValue = 0;
     bag->itemCount = 0;
     bag->itemCapacity = itemCapacity;
     bag->items = malloc(itemCapacity * sizeof(Item *));

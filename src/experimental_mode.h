@@ -27,13 +27,19 @@ typedef struct {
     double dynamicProgrammingTime, simpleGreedyTime, proportionalGreedyTime, simpleGreedyAccuracy, proportionalGreedyAccuracy;
 } ExperimentResult;
 
+// Run the dynamic programming algorithm for a specific knapsack case in Experimental mode.
+// Return NULL to indicate failure.
+// Returned DPKnapsackResult structure contains both the DP resolution table 
+// and the KnapsackRun result (execution time + filled bag).
+DPKnapsackResult exp_run_dpAlgorithm(int knapsackMaxWeight, ItemList *itemList);
+
 // Run the simple greedy algorithm for a specific knapsack case in Experimental mode.
 // Return NULL to indicate failure.
-KnapsackRun *exp_run_sgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
+KnapsackRun exp_run_sgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
 
 // Run the proportional greedy algorithm for a specific knapsack case in Experimental mode.3
 // Return NULL to indicate failure.
-KnapsackRun *exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
+KnapsackRun exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList);
 
 // Run the specific knapsack case, including random generation of items and using it 
 // Generates the random list of items and uses it to 

@@ -123,12 +123,12 @@ Item* get_most_valuable_item(const ItemList *itemsList, int weightLimit, bool pr
 
     // Pointer and value of the best item found so far. Initialize to NULL and zero to indicate no item found yet.
     Item *bestItem = NULL; 
-    int bestValue = 0;
+    double bestValue = 0.0;
 
     for (size_t index = 0; index < itemsList->size; index++) {
         Item *item = &(itemsList->items[index]);
         if (item->available && item->weight <= weightLimit) {
-            int currentValue = proportional ? get_item_ratio(item) : item->value;
+            double currentValue = proportional ? get_item_ratio(item) : item->value;
             if (currentValue > bestValue) {
                 bestValue = currentValue;
                 bestItem = item;
@@ -162,12 +162,12 @@ size_t get_most_valuable_item_index(const ItemList *itemsList, int weightLimit, 
     }
 
     size_t bestIndex = LIST_ERROR; // Initialize to an invalid index to indicate no item found yet.
-    int bestValue = 0; // Initialize to zero (raw value or value ratio of an item will never be zero).
+    double bestValue = 0.0; // Initialize to zero (raw value or value ratio of an item will never be zero).
 
     for (size_t index = 0; index < itemsList->size; index++) {
         Item *item = &(itemsList->items[index]);
         if (item->available && item->weight <= weightLimit) {
-            int currentValue = proportional ? get_item_ratio(item) : item->value;
+            double currentValue = proportional ? get_item_ratio(item) : item->value;
             if (currentValue > bestValue) {
                 bestValue = currentValue;
                 bestIndex = index;
