@@ -1,5 +1,5 @@
 CC = gcc
-TARGET = out
+TARGET = knapsack_solver.exe
 
 SRC = src/main.c \
       src/knapsack_items.c \

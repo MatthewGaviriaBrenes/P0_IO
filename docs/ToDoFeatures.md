@@ -34,8 +34,8 @@ This will be used for guidance on what needs to be implemented.
 * [X] Functions:
   * [X] Generate Knapsack bag with given maximum weight.
   * [X] Add item to knapsack, update available weight.
-  * [ ] TBD - Consider additional functions for Knapsack bag management.
-  * [ ] TBD - Consider copy function to duplicate knapsack.
+  * [X] TBD - Consider additional functions for Knapsack bag management.
+  * [X] TBD - Consider copy function to duplicate knapsack.
 * [X] Capture execution time for algorithm run.
 
 ## 4 - Greedy algorithm
@@ -103,7 +103,7 @@ For each Knapsack problem group (100 groups):
   * [X] Run Proportional Greedy algorithm.
 * [X] Collect average execution times for all three algorithms for the group.
 * [X] Compare hit ratio of Greedy algoritm runs agains DP runs.
-* [ ] Send collected information from Knapsack problem group run to TEX file. Current setup clears data after each group run to minimize memory usage.
+* [X] Send collected information from Knapsack problem group run to TEX file. Current setup clears data after each group run to minimize memory usage.
 
 ## 9 - Generate TEX file
 
