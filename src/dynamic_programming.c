@@ -131,7 +131,7 @@ void print_dp_table(const DPKnapsackResult *dpResult, const ItemList *itemsList)
         return;
     }
 
-    printf("\nDynamic Programming Table (columns = items considered 0..n, rows = capacity/weight 0..W):\n\n");
+    //printf("\nDynamic Programming Table (columns = items considered 0..n, rows = capacity/weight 0..W):\n\n");
 
     // Header row: one column per item i = 1..n.
     printf("%8s", "w \\ i");

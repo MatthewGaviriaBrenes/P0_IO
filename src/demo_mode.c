@@ -10,19 +10,20 @@ const int DEMO_MAX_ITEM_VALUE = 20;
 const int DEMO_MAX_ITEM_WEIGHT = 7;
 
 void run_demo_mode() {
-    printf("Running in Demo mode.\n");
+    //printf("Running in Demo mode.\n");
     // Create a random set of knapsack items for demo mode.
-    printf("\n--- Generating list of random items for run...\n");
+    //printf("\n--- Generating list of random items for run...\n");
 
     ItemList *demoItemList = item_list_create_random(DEMO_MAX_ITEMS, DEMO_MAX_ITEM_VALUE, DEMO_MAX_ITEM_WEIGHT);
 
     // Abort execution if item list creation failed.
+
     if (demoItemList == NULL) {
         fprintf(stderr, "Error: Failed to create demo item list.\n");
         return;
-    } else {
+    } /*else {
         print_items_list(demoItemList);
-    }
+    }*/
 
     //Create .tex
     char texFilename[64];
@@ -53,10 +54,10 @@ void run_demo_mode() {
         knapsack_free(dpKnapsackRun);
         return;
     } 
-    printf("\n--- Running Knapsack Dynamic Programming algorithm for Demo mode.\n");
+    //printf("\n--- Running Knapsack Dynamic Programming algorithm for Demo mode.\n");
     DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsackRun, demoItemList);
     
-    print_dp_table(&dpResult, demoItemList);
+    //print_dp_table(&dpResult, demoItemList);
     //print_knapsack_run(&dpResult.result);
 
     //Writes result on .tex
@@ -69,7 +70,7 @@ void run_demo_mode() {
     reset_item_list_availability(demoItemList); 
 
     // -- Simple Greedy run for demo mode -- //
-    printf("\n--- Running Simple Greedy algorithm for Demo mode.\n");
+   // printf("\n--- Running Simple Greedy algorithm for Demo mode.\n");
     Knapsack *simpleGreedyKnapsack = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
    
     // Abort execution if knapsack creation failed for Simple Greedy run.
@@ -100,7 +101,7 @@ void run_demo_mode() {
     reset_item_list_availability(demoItemList); 
 
     // -- Proportional Greedy run for demo mode. -- //
-    printf("\n--- Running Proportional Greedy algorithm for Demo mode.\n");
+    //printf("\n--- Running Proportional Greedy algorithm for Demo mode.\n");
     Knapsack *proportionalGreedyKnapsack = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
 
     // Abort execution if knapsack creation failed for Proportional Greedy run.
@@ -138,7 +139,7 @@ void run_demo_mode() {
     char logFilename[128];
 
     snprintf(command,sizeof(command),
-        "pdflatex -interaction=nonstopmode \"%s\"",texFilename);
+        "pdflatex -interaction=nonstopmode \"%s\" > /dev/null 2>&1",texFilename);
 
     snprintf(auxFilename, sizeof(auxFilename), "%s", texFilename);
     snprintf(logFilename, sizeof(logFilename), "%s", texFilename);

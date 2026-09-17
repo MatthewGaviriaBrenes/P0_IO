@@ -60,7 +60,7 @@ KnapsackRun *exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
 ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCount) {
     ExperimentResult result = {0};
 
-    printf("\n--- Running Experimental mode for case group - Knapsack Weight: %d, Item Count: %zu ---\n", knapsackMaxWeight, itemCount);
+    //printf("\n--- Running Experimental mode for case group - Knapsack Weight: %d, Item Count: %zu ---\n", knapsackMaxWeight, itemCount);
 
     // Maximum weight for items to fill knapsack is 40% of the knapsack capacity.
     int itemMaxWeight = knapsackMaxWeight * 0.4; 
@@ -174,15 +174,6 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     result.simpleGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
     result.proportionalGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
     
-    printf("SG ratio: %.4f\n", result.simpleGreedyAccuracy);
-    printf("PG ratio: %.4f\n", result.proportionalGreedyAccuracy);
-/*    printf("\n-- Algorithm Average Execution Times for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
-    printf("> Simple Greedy: %.5f ms\n", avgSimpleGreedyTime);
-    printf("> Proportional Greedy: %.5f ms\n", avgProportionalGreedyTime);
-    printf("> Dynamic Programming: %.5f ms\n", avgDynamicProgrammingTime);
-    printf("> DP Accuracy vs SG: %.2f%%\n", result.simpleGreedyAccuracy * 100.0);
-    printf("> DP Accuracy vs PG: %.2f%%\n", result.proportionalGreedyAccuracy * 100.0);
-*/
 
     //double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dynamicProgrammingRuns);
     //TODO: Send to TEX file.
@@ -241,11 +232,6 @@ void run_exp_mode(size_t caseCount) {
                     sgAccuracy[capacityIndex][itemIndex] = result.simpleGreedyAccuracy;
                     pgAccuracy[capacityIndex][itemIndex] = result.proportionalGreedyAccuracy;
 
-                    printf("Stored [%d][%d]: SG=%.4f, PG=%.4f\n",
-       capacityIndex,
-       itemIndex,
-       sgAccuracy[capacityIndex][itemIndex],
-       pgAccuracy[capacityIndex][itemIndex]);
             }
     }
     
@@ -282,7 +268,7 @@ void run_exp_mode(size_t caseCount) {
     char logFilename[128];
 
     snprintf(command,sizeof(command),
-        "pdflatex -interaction=nonstopmode \"%s\"",texFilename);
+        "pdflatex -interaction=nonstopmode \"%s\" > /dev/null 2>&1",texFilename);
 
     snprintf(auxFilename, sizeof(auxFilename), "%s", texFilename);
     snprintf(logFilename, sizeof(logFilename), "%s", texFilename);
