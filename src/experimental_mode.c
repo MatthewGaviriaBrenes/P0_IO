@@ -257,13 +257,13 @@ void run_exp_mode(size_t caseCount) {
         return;
     }
     tex_preamble(texFile, 
-        "0/1 Knapsack Problem - Experimental Mode");
+        "Knapsack Resolver - Experimental Mode");
     tex_time_table(texFile, 
-        "Dynamic Programming Average Execution Time", dpTimes);
+        "Dynamic Programming Average Execution Time (ms)", dpTimes);
     tex_time_table(texFile, 
-        "Simple Greedy Average Execution Time", sgTimes);
+        "Simple Greedy Average Execution Time (ms)", sgTimes);
     tex_time_table(texFile,
-        "Proportional Greedy Average Execution Time", pgTimes);
+        "Proportional Greedy Average Execution Time (ms)", pgTimes);
     tex_accuracy_table(texFile,
         "Simple Greedy Accuracy Compared with Dynamic Programming", sgAccuracy);
     tex_accuracy_table(texFile,

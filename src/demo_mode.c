@@ -38,7 +38,7 @@ void run_demo_mode() {
     }
 
     tex_preamble(texFile, 
-        "0/1 Knapsack Problem - Demo Mode");
+        "Knapsack Resolver - Demo Mode");
 
     tex_problem(texFile,demoItemList,
         DEMO_MAX_KNAPSACK_CAPACITY);
