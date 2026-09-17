@@ -98,17 +98,14 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     // Loop for case run number.
     for (int caseNum = 0; caseNum < caseCount; caseNum++) {
 
-        //printf("\n-- Running case %d of %zu for Knapsack Weight: %d, Item Count: %zu --\n", caseNum + 1, caseCount, knapsackMaxWeight, itemCount);
-
         // Create item list for the case.
         itemLists[caseNum] = item_list_create_random(itemCount, EXP_ITEM_MAX_VALUE, itemMaxWeight);
 
         //printf("\n--- Generated random item list for case %d:\n", caseNum + 1);
-        print_items_list(itemLists[caseNum]);
+        //print_items_list(itemLists[caseNum]);
 
         // --------------------------- //
         // Run the Dynamic Programming algorithm and store the run result in the proper run list.
-        //reset_item_list_availability(itemLists[caseNum]);
         Knapsack *dpKnapsack = knapsack_create(knapsackMaxWeight, itemLists[caseNum]->size);
 
         if (dpKnapsack == NULL) {
@@ -123,12 +120,7 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
             exit(EXIT_FAILURE);
         }
 
-        //Add run result to Dynamic Programming run list
-        //Abort execution if the entry could not be added
-        if (!knapsack_run_list_add_entry(dpRuns, dpResult.result)) {
-            fprintf(stderr, "Error: Failed to add Dynamic Programming run result to the run list for case %d.\n", caseNum + 1);
-            exit(EXIT_FAILURE);
-        }
+
         //print_knapsack_run(&dpResult.result);
         reset_item_list_availability(itemLists[caseNum]);
         // --------------------------- //
@@ -137,11 +129,13 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
             fprintf(stderr, "Error: Dynamic Programming algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
-        if (!knapsack_run_list_add_entry(dpRuns, dpResults[caseNum].result)) {
+        //Add run result to Dynamic Programming run list
+        //Abort execution if the entry could not be added
+        if (!knapsack_run_list_add_entry(dpRuns, dpResult.result)) {
             fprintf(stderr, "Error: Failed to add Dynamic Programming run result to the run list for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
-        print_dp_table(&dpResults[caseNum], itemLists[caseNum]);
+        //print_dp_table(&dpResults[caseNum], itemLists[caseNum]);
         //print_knapsack_run(dpResults[caseNum].result);
         reset_item_list_availability(itemLists[caseNum]);
 
@@ -189,8 +183,6 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     result.simpleGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
     result.proportionalGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
     
-    //double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dynamicProgrammingRuns);
-    //TODO: Send to TEX file.
 
     // --- Getting match ratios (SG/PG vs DP) --- 
     //TODO: Send average execution times to TEX file.
@@ -198,11 +190,10 @@ ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, siz
     // The match ratio is the percentage of times the Greedy algorithms produced the same total value as the Dynamic Programming algorithm for the same case.
     double dp_sg_match_ratio = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
     double dp_pg_match_ratio = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
-    printf("\n-- Algorithm Match Ratios for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
-    printf("> Simple Greedy vs Dynamic Programming: %.2f%%\n", dp_sg_match_ratio * 100.0);
-    printf("> Proportional Greedy vs Dynamic Programming: %.2f%%\n", dp_pg_match_ratio * 100.0);
 
-    //TODO: Send to TEX file.
+    //printf("\n-- Algorithm Match Ratios for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
+    //printf("> Simple Greedy vs Dynamic Programming: %.2f%%\n", dp_sg_match_ratio * 100.0);
+    //printf("> Proportional Greedy vs Dynamic Programming: %.2f%%\n", dp_pg_match_ratio * 100.0);
 
     // --- Memory Cleanup ---
     // Clean run results first
