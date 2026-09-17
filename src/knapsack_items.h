@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
 
 #ifndef KNAPSACK_ITEM_H
 #define KNAPSACK_ITEM_H
@@ -27,7 +28,7 @@ typedef struct {
 Item *item_create(int value, int weight);
 
 // Calculate the ratio of value to weight for a knapsack item. Returns -1 if there were errors.
-int get_item_ratio(const Item *item);
+double get_item_ratio(const Item *item);
 
 // Create an array to store a specific amount of items to fill the knapsack.
 ItemList *item_list_create(size_t listSize);

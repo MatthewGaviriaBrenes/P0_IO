@@ -6,6 +6,7 @@
 #include "knapsack_bag.h"
 #include "knapsack_run.h"
 #include "greedy_algorithms.h"
+#include "dynamic_programming.h"
 
 #ifndef DEMO_MODE_H
 #define DEMO_MODE_H
@@ -21,7 +22,6 @@ extern const int DEMO_MAX_ITEM_WEIGHT;
 
 // Run the demo mode.
 void run_demo_mode();
-
 
 
 #endif // DEMO_MODE_H
