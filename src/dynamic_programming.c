@@ -97,6 +97,7 @@ DPKnapsackResult dp_knapsack_solve(Knapsack *bag, const ItemList *itemsList) {
             }
         }
     }
+    bag->totalValue = table[n][capacity];
 
     clock_gettime(CLOCK_MONOTONIC, &end);
     const double elapsedMs = (end.tv_sec - start.tv_sec) * 1000.0
@@ -130,7 +131,7 @@ void print_dp_table(const DPKnapsackResult *dpResult, const ItemList *itemsList)
         return;
     }
 
-    printf("\nDynamic Programming Table (columns = items considered 0..n, rows = capacity/weight 0..W):\n\n");
+    //printf("\nDynamic Programming Table (columns = items considered 0..n, rows = capacity/weight 0..W):\n\n");
 
     // Header row: one column per item i = 1..n.
     printf("%8s", "w \\ i");

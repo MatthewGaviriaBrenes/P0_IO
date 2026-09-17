@@ -230,6 +230,6 @@ void print_items_list(const ItemList *list) {
     }
     for (size_t index = 0; index < list->size; index++) {
         const Item *item = &(list->items[index]);
-        printf("Item %zu - ID: %d, Value: %d, Weight: %d, Available: %s\n", index + 1, item->id, item->value, item->weight, item->available ? "Yes" : "No");
+        //printf("Item %zu - ID: %d, Value: %d, Weight: %d, Available: %s\n", index + 1, item->id, item->value, item->weight, item->available ? "Yes" : "No");
     }
 }

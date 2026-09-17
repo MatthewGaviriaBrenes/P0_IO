@@ -18,9 +18,9 @@ KnapsackRun knapsack_run_create(double executionTime, Knapsack *bag) {
 }
 
 // Print the result of a knapsack run on the screen.
-void print_knapsack_run(KnapsackRun result) {
-    if (result.bag == NULL) {
-        fprintf(stderr, "Error: Knapsack bag in run result is NULL.\n");
+/*void print_knapsack_run(const KnapsackRun *result) {
+    if (result == NULL) {
+        fprintf(stderr, "Error: Knapsack run result is NULL.\n");
         return;
     }    
     printf("Knapsack Run Result:\n");
@@ -41,7 +41,7 @@ void print_knapsack_run(KnapsackRun result) {
     } else {
         printf("Knapsack Bag is NULL.\n");
     }
-}
+}*/
 
 // Create a new list to store Knapsack run results.
 KnapsackRunList *knapsack_run_list_create(size_t listSize) {

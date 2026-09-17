@@ -1,6 +1,9 @@
 // experimental_mode.c
 
-#include "demo_mode.h"
+//#include "demo_mode.h"
+#include "experimental_mode.h"
+#include "tex_generator.h"
+#include <string.h>
 
 // Values for the start, end and steps for Knapsack weight capacity.
 const int EXP_START_KNAPSACK_WEIGHT_CAPACITY = 100;
@@ -61,9 +64,10 @@ KnapsackRun exp_run_pgAlgorithm(int knapsackMaxWeight, ItemList *itemList) {
 // Run a group of cases for the experimental mode.
 // caseGroupParameter is used to track a case group.
 //TODO: Update after integrating DP executions (wait for Josue).
-void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCount) {
+ExperimentResult run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCount) {
+    ExperimentResult result = {0};
 
-    printf("\n--- Running Experimental mode for case group - Knapsack Weight: %d, Item Count: %zu ---\n", knapsackMaxWeight, itemCount);
+    //printf("\n--- Running Experimental mode for case group - Knapsack Weight: %d, Item Count: %zu ---\n", knapsackMaxWeight, itemCount);
 
     // Maximum weight for items to fill knapsack is 40% of the knapsack capacity.
     int itemMaxWeight = knapsackMaxWeight * 0.4; 
@@ -73,9 +77,6 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     KnapsackRunList *dpRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *sgRuns = knapsack_run_list_create(caseCount);
     KnapsackRunList *pgRuns = knapsack_run_list_create(caseCount);
-    
-    // dpResults array contains the full information for DP runs (e.g. DP solution table, run results).
-    DPKnapsackResult *dpResults = malloc(sizeof(DPKnapsackResult) * (size_t) caseCount);
 
     // Abort execution if any of the run lists could not be created.
     //TODO: Update after integrating DP executions (wait for Josue).
@@ -93,18 +94,40 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     
     // Loop for case run number.
     for (int caseNum = 0; caseNum < caseCount; caseNum++) {
-        printf("\n-- Running case %d of %zu for Knapsack Weight: %d, Item Count: %zu --\n", caseNum + 1, caseCount, knapsackMaxWeight, itemCount);
+
+        //printf("\n-- Running case %d of %zu for Knapsack Weight: %d, Item Count: %zu --\n", caseNum + 1, caseCount, knapsackMaxWeight, itemCount);
 
         // Create item list for the case.
         itemLists[caseNum] = item_list_create_random(itemCount, EXP_ITEM_MAX_VALUE, itemMaxWeight);
 
-        printf("\n--- Generated random item list for case %d:\n", caseNum + 1);
+        //printf("\n--- Generated random item list for case %d:\n", caseNum + 1);
         print_items_list(itemLists[caseNum]);
 
         // --------------------------- //
         // Run the Dynamic Programming algorithm and store the run result in the proper run list.
-        //TODO: Add after implementing the dynamic programming algorithm.
         //reset_item_list_availability(itemLists[caseNum]);
+        Knapsack *dpKnapsack = knapsack_create(knapsackMaxWeight, itemLists[caseNum]->size);
+
+        if (dpKnapsack == NULL) {
+            fprintf(stderr, "Error: Failed to create knapsack for Dynamic Programming algorithm.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsack, itemLists[caseNum]);
+
+        if (dpResult.result.bag == NULL) {
+            fprintf(stderr, "Error: Dynamic Programming algorithm failed to produce a valid knapsack run for case %d.\n", caseNum + 1);
+            exit(EXIT_FAILURE);
+        }
+
+        //Add run result to Dynamic Programming run list
+        //Abort execution if the entry could not be added
+        if (knapsack_run_list_add_entry(dpRuns, dpResult.result) == NULL) {
+            fprintf(stderr, "Error: Failed to add Dynamic Programming run result to the run list for case %d.\n", caseNum + 1);
+            exit(EXIT_FAILURE);
+        }
+        //print_knapsack_run(&dpResult.result);
+        reset_item_list_availability(itemLists[caseNum]);
         // --------------------------- //
         dpResults[caseNum] = exp_run_dpAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
         if (dpResults[caseNum].table == NULL || dpResults[caseNum].result.bag == NULL) {
@@ -119,6 +142,7 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
         print_knapsack_run(dpResults[caseNum].result);
         reset_item_list_availability(itemLists[caseNum]);
 
+
         // Run the Simple Greedy algorithm and store the run result in the proper run list.
         KnapsackRun sgRun = exp_run_sgAlgorithm(knapsackMaxWeight, itemLists[caseNum]);
         if (sgRun.bag == NULL) {
@@ -129,9 +153,8 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
         if (!knapsack_run_list_add_entry(sgRuns, sgRun)) {
             fprintf(stderr, "Error: Failed to add Simple Greedy run result to the run list for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
-        }
-        
-        print_knapsack_run(sgRun);
+        } 
+        //print_knapsack_run(sgRun);
         reset_item_list_availability(itemLists[caseNum]);
 
         // Run the Proportional Greedy algorithm and store the run result in the proper run list.
@@ -145,7 +168,7 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
             fprintf(stderr, "Error: Failed to add Proportional Greedy run result to the run list for case %d.\n", caseNum + 1);
             exit(EXIT_FAILURE);
         }
-        print_knapsack_run(pgRun);
+        //print_knapsack_run(pgRun);
         reset_item_list_availability(itemLists[caseNum]);
     }
 
@@ -155,12 +178,15 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dpRuns);
     double avgSimpleGreedyTime = get_knapsack_run_avg_execution_time(sgRuns);
     double avgProportionalGreedyTime = get_knapsack_run_avg_execution_time(pgRuns);
-    
+    double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dpRuns);
 
-    printf("\n-- Algorithm Average Execution Times for Knapsack (Weight Capacity: %d, Item Count: %zu) --\n", knapsackMaxWeight, itemCount);
-    printf("> Dynamic Programming: %.6f ms\n", avgDynamicProgrammingTime);
-    printf("> Simple Greedy: %.6f ms\n", avgSimpleGreedyTime);
-    printf("> Proportional Greedy: %.6f ms\n", avgProportionalGreedyTime);
+    result.dynamicProgrammingTime = avgDynamicProgrammingTime;
+    result.simpleGreedyTime = avgSimpleGreedyTime;
+    result.proportionalGreedyTime = avgProportionalGreedyTime;
+
+    result.simpleGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, sgRuns);
+    result.proportionalGreedyAccuracy = get_knapsack_runs_match_ratio(dpRuns, pgRuns);
+    
 
     //double avgDynamicProgrammingTime = get_knapsack_run_avg_execution_time(dynamicProgrammingRuns);
     //TODO: Send to TEX file.
@@ -183,26 +209,27 @@ void run_exp_case_group(size_t caseCount, int knapsackMaxWeight, size_t itemCoun
     knapsack_run_list_free(pgRuns);
     knapsack_run_list_free(dpRuns);
 
-    // Clear DP tables for each case in the case group.
-    for (size_t caseNum = 0; caseNum < caseCount; caseNum++) {
-        dp_result_free_table(&dpResults[caseNum]);
-    }
-
     // Clean item lists
     for (size_t caseNum = 0; caseNum < caseCount; caseNum++) {
         item_list_free(itemLists[caseNum]);
     }
-
-    //DEBUG: Wait for user input before continuing to the next case group.
-    printf("\nPress Enter to continue to the next case group...");
-    getchar();
+    free(itemLists);
+    return result;
 }
 
 // Run the experimental mode.
 // Uses the number argument *n) passed by the "-E=n" parameter.
 // For each case group from 1 to n, run 100 cases with varying item and weight capacities.
 void run_exp_mode(size_t caseCount) {
-    printf("Running in Experimental mode - Input value: %zu - Cases: %zu\n", caseCount, (caseCount * 100));
+
+    ExperimentResult result;
+    int capacityIndex, itemIndex;
+
+    double dpTimes[10][10] = {0}, sgTimes[10][10] = {0},
+           pgTimes[10][10] = {0}, sgAccuracy[10][10] = {0},
+           pgAccuracy[10][10] = {0};
+
+    //printf("Running in Experimental mode - Input value: %zu - Cases: %zu\n", caseCount, (caseCount * 100));
 
     // Loop to iterate over all weight options for the knapsack.
     for (int knapsackMaxWeight = EXP_START_KNAPSACK_WEIGHT_CAPACITY
@@ -211,11 +238,73 @@ void run_exp_mode(size_t caseCount) {
             // Loop to iterate over all item count options to fill the knapsack.
             for (size_t itemCount = EXP_START_ITEM_COUNT; itemCount <= EXP_END_ITEM_COUNT; 
                     itemCount += EXP_STEP_ITEM_COUNT) {
-                        run_exp_case_group(caseCount, knapsackMaxWeight, itemCount);
+                    
+                    result = run_exp_case_group(caseCount, knapsackMaxWeight, itemCount);
+                    capacityIndex = (knapsackMaxWeight - EXP_START_KNAPSACK_WEIGHT_CAPACITY)/EXP_STEP_KNAPSACK_WEIGHT_CAPACITY;
+                    itemIndex = (itemCount - EXP_START_ITEM_COUNT)/EXP_STEP_ITEM_COUNT;
+
+                    //printf("capacity=%d, items=%zu, indexes=[%d][%d]\n",knapsackMaxWeight,itemCount,capacityIndex,itemIndex);
+                    dpTimes[capacityIndex][itemIndex] = result.dynamicProgrammingTime;
+                    sgTimes[capacityIndex][itemIndex] = result.simpleGreedyTime;
+                    pgTimes[capacityIndex][itemIndex] = result.proportionalGreedyTime;
+                    sgAccuracy[capacityIndex][itemIndex] = result.simpleGreedyAccuracy;
+                    pgAccuracy[capacityIndex][itemIndex] = result.proportionalGreedyAccuracy;
+
             }
     }
     
     //TODO: Send collected data to TEX file.
+
+    //Create .tex
+    char texFilename[64];
+    tex_gen_filename(texFilename, sizeof(texFilename));
+    FILE *texFile = tex_create_file(texFilename);
+
+    if (texFile == NULL) {
+        fprintf(stderr, "Error: Failed to create TEX file.\n");
+        return;
+    }
+    tex_preamble(texFile, 
+        "0/1 Knapsack Problem - Experimental Mode");
+    tex_time_table(texFile, 
+        "Dynamic Programming Average Execution Time", dpTimes);
+    tex_time_table(texFile, 
+        "Simple Greedy Average Execution Time", sgTimes);
+    tex_time_table(texFile,
+        "Proportional Greedy Average Execution Time", pgTimes);
+    tex_accuracy_table(texFile,
+        "Simple Greedy Accuracy Compared with Dynamic Programming", sgAccuracy);
+    tex_accuracy_table(texFile,
+        "Proportional Greedy Accuracy Compared with Dynamic Programming", pgAccuracy);
+
+    tex_end(texFile);
+    fclose(texFile);
+
+    //Create PDF
+    char command[128];
+    char auxFilename[128];
+    char logFilename[128];
+
+    snprintf(command,sizeof(command),
+        "pdflatex -interaction=nonstopmode \"%s\" > /dev/null 2>&1",texFilename);
+
+    snprintf(auxFilename, sizeof(auxFilename), "%s", texFilename);
+    snprintf(logFilename, sizeof(logFilename), "%s", texFilename);
+
+    int status = system(command);
+
+    if (status != 0) {
+        fprintf(stderr, "Error: Failed to generate PDF from TEX file.\n");
+        return;
+    }
+    auxFilename[strlen(auxFilename) - 3] = '\0';
+    logFilename[strlen(logFilename) - 3] = '\0';
+
+    strcat(auxFilename, "aux");
+    strcat(logFilename, "log");
+
+    remove(auxFilename);
+    remove(logFilename);
 
     printf("Experimental mode finished running.\n");
 }
