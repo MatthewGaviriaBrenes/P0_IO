@@ -13,13 +13,20 @@ FILE *tex_create_file(const char *filename);
 // Initial sections of TEX file, including title and date.
 void tex_gen_filename(char *buffer, size_t bufferSize);
 void tex_preamble(FILE *file, const char *title);
-void tex_problem(FILE *file, const ItemList *items, int capacity);
+//void tex_problem(FILE *file, const ItemList *items, int capacity);
+
+// Header section for Demo mode's definition (e.g. knapsack capacity, item count, and item value/weight constraints).
+void tex_demo_mode_def_header(FILE *file, const ItemList *itemsList, 
+    int knapsackCapacity, int maxItemValue, int maxItemWeight);
 
 // Header section for Experimental mode's definition (e.g. number of cases, weight and item count ranges).
 void tex_exp_mode_def_header(FILE *file, size_t caseCount);
 
 // Header section for Experimental mode's statistics.
 void tex_exp_mode_stats_header(FILE *file);
+
+// List of items to fill the Knapsack.
+void tex_item_list(FILE *file, const ItemList *itemsList);
 
 // DP Table for DP algorithm run.
 void tex_dp_table(FILE *file, const DPKnapsackResult *dpResult, const ItemList *itemsList);

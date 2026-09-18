@@ -5,7 +5,7 @@
 #include <string.h>
 
 const int DEMO_MAX_KNAPSACK_CAPACITY = 15;
-const int DEMO_MAX_ITEMS = 6;
+const size_t DEMO_MAX_ITEMS = 6;
 const int DEMO_MAX_ITEM_VALUE = 20;
 const int DEMO_MAX_ITEM_WEIGHT = 7;
 
@@ -40,8 +40,9 @@ void run_demo_mode() {
     tex_preamble(texFile, 
         "Knapsack Resolver - Demo Mode");
 
-    tex_problem(texFile,demoItemList,
-        DEMO_MAX_KNAPSACK_CAPACITY);
+    // tex_problem(texFile,demoItemList, DEMO_MAX_KNAPSACK_CAPACITY);
+    tex_demo_mode_def_header(texFile, demoItemList, 
+        DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEM_VALUE, DEMO_MAX_ITEM_WEIGHT);
 
     // -- 1/0 Knapsack DP run for demo mode -- //
 

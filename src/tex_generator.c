@@ -40,7 +40,7 @@ void tex_preamble(FILE *file, const char *title)
     fprintf(file, "\\maketitle\n\n");
 }
 
-void tex_problem(FILE *file, const ItemList *items, int capacity)
+/* void tex_problem(FILE *file, const ItemList *items, int capacity)
 {
     fprintf(file, "\\section{Problem Definition}\n");
     fprintf(file, "Knapsack capacity: %d\n\n", capacity);
@@ -63,6 +63,22 @@ void tex_problem(FILE *file, const ItemList *items, int capacity)
     fprintf(file, "\\bottomrule\n");
     fprintf(file, "\\end{tabular}\n");
     fprintf(file, "\\end{center}\n\n");
+} */
+
+void tex_demo_mode_def_header(FILE *file, const ItemList *itemsList, 
+    int knapsackCapacity, int maxItemValue, int maxItemWeight) {
+        if (itemsList == NULL) {
+            fprintf(stderr, "Error: Item list is NULL.\n");
+            return;
+        }
+        fprintf(file, "\\section{Problem Definition}\n");
+        fprintf(file, "\\[\\text{Maximize } Z = \\sum_{i=1}^{n} v_i x_i\\]\n\n");
+        fprintf(file, "\\[\\text{Subject to: } \\sum_{i=1}^{n} w_i x_i \\leq C; x_i \\in \\{0, 1\\}; 0 < w_i \\leq W; 0 < v_i \\leq V\\]\n\n");
+      
+        fprintf(file, "- Number of items available to fill the knapsack [$n$]: %zu\n\n", itemsList->size);
+        fprintf(file, "- Knapsack capacity [$C$]: %d\n\n", knapsackCapacity);
+        fprintf(file, "- Max value per item [$V$]: %d\n\n", maxItemValue);
+        fprintf(file, "- Max weight per item [$W$]: %d\n\n", maxItemWeight);
 }
 
 void tex_exp_mode_def_header(FILE *file, size_t caseCount) {
@@ -75,6 +91,33 @@ void tex_exp_mode_stats_header(FILE *file) {
     fprintf(file, "\\section{Experimental Mode Statistics}\n");
     fprintf(file, "This section presents the aggregated results of multiple runs of the Knapsack algorithms with different configurations.\n\n");
 }
+
+void tex_item_list(FILE *file, const ItemList *itemsList) {
+    if (itemsList == NULL) {
+        fprintf(stderr, "Error: Item list is NULL.\n");
+        return;
+    }
+    fprintf(file, "\\subsection{Item List}\n");
+    fprintf(file, "\\begin{center}\n");
+    fprintf(file, "\\begin{tabular}{ccc}\n");
+    fprintf(file, "\\toprule\n");
+    fprintf(file, "Item & Weight & Value \\\\\n");
+    fprintf(file, "\\midrule\n");
+
+    for (size_t i = 0; i < itemsList->size; i++) {
+        fprintf(
+            file,
+            "%d & %d & %d \\\\\n",
+            itemsList->items[i].id,
+            itemsList->items[i].weight,
+            itemsList->items[i].value
+        );
+    }
+    fprintf(file, "\\bottomrule\n");
+    fprintf(file, "\\end{tabular}\n");
+    fprintf(file, "\\end{center}\n\n");
+}
+
 
 void tex_dp_table(FILE *file,
     const DPKnapsackResult *dpResult,

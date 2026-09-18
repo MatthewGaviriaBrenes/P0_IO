@@ -15,7 +15,7 @@
 extern const int DEMO_MAX_KNAPSACK_CAPACITY;
 
 // Constraints for item list for demo mode.
-extern const int DEMO_MAX_ITEMS;
+extern const size_t DEMO_MAX_ITEMS;
 extern const int DEMO_MAX_ITEM_VALUE;
 extern const int DEMO_MAX_ITEM_WEIGHT;
 
