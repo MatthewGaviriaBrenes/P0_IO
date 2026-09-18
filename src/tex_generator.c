@@ -77,8 +77,8 @@ void tex_demo_mode_def_header(FILE *file, const ItemList *itemsList,
       
         fprintf(file, "- Number of items available to fill the knapsack [$n$]: %zu\n\n", itemsList->size);
         fprintf(file, "- Knapsack capacity [$C$]: %d\n\n", knapsackCapacity);
-        fprintf(file, "- Max value per item [$V$]: %d\n\n", maxItemValue);
-        fprintf(file, "- Max weight per item [$W$]: %d\n\n", maxItemWeight);
+        fprintf(file, "- Maximum value per item [$V$]: %d\n\n", maxItemValue);
+        fprintf(file, "- Maximum weight per item [$W$]: %d\n\n", maxItemWeight);
 }
 
 void tex_exp_mode_def_header(FILE *file, size_t caseCount) {
