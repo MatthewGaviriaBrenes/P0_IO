@@ -303,6 +303,7 @@ void run_exp_mode(size_t caseCount) {
     strcat(auxFilename, "aux");
     strcat(logFilename, "log");
 
+    //Delete aux and log file created when generating pdf file
     remove(auxFilename);
     remove(logFilename);
 
