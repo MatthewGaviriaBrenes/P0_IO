@@ -186,9 +186,6 @@ size_t get_most_valuable_item_index(const ItemList *itemsList, int weightLimit, 
 // Create a random set of knapsack items with specified list size, maximum value, and maximum weight.
 ItemList *item_list_create_random(size_t listSize, int maxValue, int maxWeight) {
 
-    // Set random seed based on current time to ensure different random values on each run.
-    srand((unsigned int) time(NULL));
-
     if (listSize <= 0 || maxValue <= 0 || maxWeight <= 0) {
         fprintf(stderr, "List size, max value, and max weight must be greater than zero.\n");
         exit(EXIT_FAILURE);

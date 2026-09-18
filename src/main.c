@@ -16,6 +16,10 @@
 
 int main(int argc, char *argv[]) 
 {
+
+    // Set random seed based on current time to ensure different random values on each run.
+    srand((unsigned int) time(NULL));
+
     // Show info on how to use the program if not running with a single parameter. 
     if (argc != 2) 
     {

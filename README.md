@@ -42,6 +42,7 @@ C
 - GCC
 - GNU Make
 - Pdflatex
+- evince
 
 ## Project Structure
 
