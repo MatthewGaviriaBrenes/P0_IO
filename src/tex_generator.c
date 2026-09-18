@@ -215,7 +215,7 @@ void tex_dp_run_stats(FILE *file, DPKnapsackResult run, ItemList *itemsList) {
         fprintf(stderr, "Error: Dynamic Programming run result is NULL.\n");
         return;
     }
-    fprintf(file, "\\section{Dynamic Programming Algorithm Run Stats}\n");
+    fprintf(file, "\\section{Dynamic Programming Algorithm Run Statistics}\n");
     tex_dp_table(file, &run, itemsList);
     tex_run_time(file, run.result, "Dynamic Programming");
     tex_run_contents(file, run.result, "Dynamic Programming");
@@ -223,7 +223,7 @@ void tex_dp_run_stats(FILE *file, DPKnapsackResult run, ItemList *itemsList) {
 
 void tex_greedy_run_stats(FILE *file, KnapsackRun run, bool proportional) {
     const char *algorithmName = proportional ? "Proportional Greedy" : "Simple Greedy";
-    fprintf(file, "\\subsection{%s Algorithm Run Stats}\n", algorithmName);
+    fprintf(file, "\\subsection{%s Algorithm Run Statistics}\n", algorithmName);
     tex_run_time(file, run, algorithmName);
     tex_run_contents(file, run, algorithmName);
 }
