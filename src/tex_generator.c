@@ -19,7 +19,6 @@ FILE *tex_create_file(const char *filename)
     return file;
 }
 
-
 //Generates filename based on current date for TEX report
 void tex_gen_filename(char *buffer, size_t bufferSize)
 {
@@ -67,11 +66,19 @@ void tex_problem(FILE *file, const ItemList *items, int capacity)
     fprintf(file, "\\end{center}\n\n");
 }
 
+void tex_exp_mode_header(FILE *file, size_t caseCount) {
+    fprintf(file, "\\section{Problemn Definition}\n");
+    fprintf(file, "Number of cases per configuration: %zu\n\n", caseCount);
+    fprintf(file, "Knapsack weight capacities: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100\n\n");
+    fprintf(file, "Item counts: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100\n\n");
+    fprintf(file, "Total runs for all configuration: %zu\n\n", (caseCount * 100));
+}
+
 void tex_dp_table(FILE *file,
     const DPKnapsackResult *dpResult,
     const ItemList *itemsList)
 {
-    fprintf(file, "\\section{Dynamic Programming Table}\n");
+    fprintf(file, "\\subsection{Dynamic Programming Table}\n");
     fprintf(file, "\\begin{center}\n");
     fprintf(file, "\\begin{tabular}{c");
 
@@ -122,6 +129,58 @@ void tex_dp_table(FILE *file,
     fprintf(file, "\\bottomrule\n");
     fprintf(file, "\\end{tabular}\n");
     fprintf(file, "\\end{center}\n\n");
+}
+
+void tex_run_time(FILE *file, KnapsackRun run, const char *algorithmName) {
+    fprintf(file, "Execution Time: %.6f ms\n\n", run.executionTime);
+}
+
+void tex_run_contents(FILE *file, KnapsackRun run, const char *algorithmName) {
+    if (run.bag == NULL) {
+        fprintf(stderr, "Error: Knapsack bag is NULL for %s algorithm.\n", algorithmName);
+        return;
+    }
+    fprintf(file, "Total Value of Items in Knapsack: %d\n\n", run.bag->totalValue);
+    fprintf(file, "Total Weight of Items in Knapsack: %d\n\n", run.bag->maxWeight - run.bag->freeWeight);
+    fprintf(file, "Items in Knapsack:\n\n");
+    fprintf(file, "\\begin{center}\n");
+    fprintf(file, "\\begin{tabular}{ccc}\n");
+    fprintf(file, "\\toprule\n");
+    fprintf(file, "Item & Weight & Value \\\\\n");
+    fprintf(file, "\\midrule\n");
+    for (int i = 0; i < run.bag->itemCount; i++) {
+        Item *item = get_item_from_knapsack(run.bag, i);
+        if (item != NULL) {
+            fprintf(
+                file,
+                "%d & %d & %d \\\\\n",
+                item->id,
+                item->weight,
+                item->value
+            );
+        }
+    }
+    fprintf(file, "\\bottomrule\n");
+    fprintf(file, "\\end{tabular}\n");
+    fprintf(file, "\\end{center}\n\n");
+}
+
+void tex_dp_run_stats(FILE *file, DPKnapsackResult run, ItemList *itemsList) {
+    if (run.result.executionTime == 0 || run.result.bag == NULL) {
+        fprintf(stderr, "Error: Dynamic Programming run result is NULL.\n");
+        return;
+    }
+    fprintf(file, "\\section{Dynamic Programming Algorithm Run Stats}\n");
+    tex_dp_table(file, &run, itemsList);
+    tex_run_time(file, run.result, "Dynamic Programming");
+    tex_run_contents(file, run.result, "Dynamic Programming");
+}
+
+void tex_greedy_run_stats(FILE *file, KnapsackRun run, bool proportional) {
+    const char *algorithmName = proportional ? "Proportional Greedy" : "Simple Greedy";
+    fprintf(file, "\\subsection{%s Algorithm Run Stats}\n", algorithmName);
+    tex_run_time(file, run, algorithmName);
+    tex_run_contents(file, run, algorithmName);
 }
 
 void tex_time_table(FILE *file,const char *title,
@@ -197,7 +256,6 @@ void tex_accuracy_table(FILE *file, const char *title,
     fprintf(file, "\\end{tabular}\n");
     fprintf(file, "\\end{center}\n\n");
 }
-
 
 // Writes the end of the LaTeX document.
 void tex_end(FILE *file)

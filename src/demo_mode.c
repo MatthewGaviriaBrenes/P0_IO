@@ -55,12 +55,12 @@ void run_demo_mode() {
     } 
     //printf("\n--- Running Knapsack Dynamic Programming algorithm for Demo mode.\n");
     DPKnapsackResult dpResult = dp_knapsack_solve(dpKnapsackRun, demoItemList);
-    
-    //print_dp_table(&dpResult, demoItemList);
-    //print_knapsack_run(&dpResult.result);
 
     //Writes result on .tex
-    tex_dp_table(texFile, &dpResult, demoItemList);
+    //tex_dp_table(texFile, &dpResult, demoItemList);
+
+    //Writes run stats on .tex
+    tex_dp_run_stats(texFile, dpResult, demoItemList);
     
     dp_result_free_table(&dpResult);
     knapsack_free(dpKnapsackRun);
@@ -91,8 +91,7 @@ void run_demo_mode() {
         return;
     } 
     
-    //print_knapsack_run(simpleGreedyRun);
-    
+    tex_greedy_run_stats(texFile, simpleGreedyRun, false);
     
     // Reset item availability for the next algorithm run.
     reset_item_list_availability(demoItemList); 
@@ -120,7 +119,7 @@ void run_demo_mode() {
         knapsack_free(dpKnapsackRun);
         return;
     }
-    //print_knapsack_run(proportionalGreedyRun);
+    tex_greedy_run_stats(texFile, proportionalGreedyRun, true);
 
     knapsack_free(simpleGreedyRun.bag);
     knapsack_free(proportionalGreedyRun.bag);
