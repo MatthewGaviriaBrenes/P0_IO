@@ -15,8 +15,11 @@ void tex_gen_filename(char *buffer, size_t bufferSize);
 void tex_preamble(FILE *file, const char *title);
 void tex_problem(FILE *file, const ItemList *items, int capacity);
 
-// Header section for Experimental mode report.
-void tex_exp_mode_header(FILE *file, size_t caseCount);
+// Header section for Experimental mode's definition (e.g. number of cases, weight and item count ranges).
+void tex_exp_mode_def_header(FILE *file, size_t caseCount);
+
+// Header section for Experimental mode's statistics.
+void tex_exp_mode_stats_header(FILE *file);
 
 // DP Table for DP algorithm run.
 void tex_dp_table(FILE *file, const DPKnapsackResult *dpResult, const ItemList *itemsList);

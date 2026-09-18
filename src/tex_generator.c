@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "tex_generator.h"
-
 #include "knapsack_items.h"
 #include "knapsack_bag.h"
 #include "dynamic_programming.h"
@@ -66,12 +65,15 @@ void tex_problem(FILE *file, const ItemList *items, int capacity)
     fprintf(file, "\\end{center}\n\n");
 }
 
-void tex_exp_mode_header(FILE *file, size_t caseCount) {
-    fprintf(file, "\\section{Problemn Definition}\n");
+void tex_exp_mode_def_header(FILE *file, size_t caseCount) {
+    fprintf(file, "\\section{Problem Definition}\n");
     fprintf(file, "Number of cases per configuration: %zu\n\n", caseCount);
-    fprintf(file, "Knapsack weight capacities: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100\n\n");
-    fprintf(file, "Item counts: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100\n\n");
-    fprintf(file, "Total runs for all configuration: %zu\n\n", (caseCount * 100));
+    fprintf(file, "Total runs for all configurations: %zu\n\n", (caseCount * 100));
+}
+
+void tex_exp_mode_stats_header(FILE *file) {
+    fprintf(file, "\\section{Experimental Mode Statistics}\n");
+    fprintf(file, "This section presents the aggregated results of multiple runs of the Knapsack algorithms with different configurations.\n\n");
 }
 
 void tex_dp_table(FILE *file,

@@ -258,7 +258,8 @@ void run_exp_mode(size_t caseCount) {
     }
     tex_preamble(texFile, 
         "Knapsack Resolver - Experimental Mode");
-    tex_exp_mode_header(texFile, caseCount);
+    tex_exp_mode_def_header(texFile, caseCount);
+    tex_exp_mode_stats_header(texFile);
     tex_time_table(texFile, 
         "Dynamic Programming Average Execution Time (ms)", dpTimes);
     tex_time_table(texFile, 
