@@ -135,21 +135,31 @@ void run_demo_mode() {
 
     //Create PDF
     char command[128];
-    char auxFilename[128];
-    char logFilename[128];
+    char auxFilename[64];
+    char logFilename[64];
+    char openCommand[128];
+    char pdfFilename[64];
 
     snprintf(command,sizeof(command),
         "pdflatex -interaction=nonstopmode \"%s\" > /dev/null 2>&1",texFilename);
 
     snprintf(auxFilename, sizeof(auxFilename), "%s", texFilename);
     snprintf(logFilename, sizeof(logFilename), "%s", texFilename);
+    snprintf(pdfFilename, sizeof(pdfFilename), "%s", texFilename);
+    
+    //change .tex for .pdf
+    pdfFilename[strlen(pdfFilename) - 3] = '\0';
+    strcat(pdfFilename, "pdf");
 
+    snprintf(openCommand, sizeof(openCommand),"evince \"%s\" &", pdfFilename);
+    
     int status = system(command);
 
     if (status != 0) {
         fprintf(stderr, "Error: Failed to generate PDF from TEX file.\n");
         return;
     }
+
     auxFilename[strlen(auxFilename) - 3] = '\0';
     logFilename[strlen(logFilename) - 3] = '\0';
 
@@ -158,6 +168,9 @@ void run_demo_mode() {
 
     remove(auxFilename);
     remove(logFilename);
+
+    //Display pdf
+    system(openCommand);
 
     // -- Completion of Demo mode run --//
     printf("Demo mode run completed.\n");
