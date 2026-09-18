@@ -44,6 +44,8 @@ void run_demo_mode() {
     tex_demo_mode_def_header(texFile, demoItemList, 
         DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEM_VALUE, DEMO_MAX_ITEM_WEIGHT);
 
+    tex_item_list(texFile, demoItemList);
+
     // -- 1/0 Knapsack DP run for demo mode -- //
 
     Knapsack *dpKnapsackRun = knapsack_create(DEMO_MAX_KNAPSACK_CAPACITY, DEMO_MAX_ITEMS);
